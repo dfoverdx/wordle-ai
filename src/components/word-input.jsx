@@ -21,9 +21,16 @@ const Input = styled(MUIInput)`
 `
 
 export const WordInput = ({ onSubmit, dictionary }) => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState(
+    localStorage.getItem('word') || ''
+  )
+  
   const valid = 
     value.length === 5 && dictionary.includes(value)
+  
+  if (!dictionary.length) {
+    return null
+  }
   
   const handleChange = e => {
     const val = e.target.value
@@ -36,23 +43,28 @@ export const WordInput = ({ onSubmit, dictionary }) => {
       e.key === 'Enter'
     )) {
       e.target.select()
-      onSubmit(value);
+      handleSubmit()
     }
+  }
+  
+  const handleSubmit = () => {
+    localStorage.setItem('word', value)
+    onSubmit(value)
   }
   
   return (
     <Container>
       <Input
-        autoFocus
         maxLength={5} 
         onChange={handleChange}
+        onFocus={e => e.target.select()}
         value={value}
         onKeyDown={handleKeyDown}
         disabled={!dictionary.length}
       />
       <Button
         disabled={!valid}
-        onClick={() => onSubmit(value)}
+        onClick={handleSubmit}
       >
         Go
       </Button>

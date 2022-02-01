@@ -3,11 +3,15 @@ import React, {
   useEffect,
   useState,
   useRef,
+  Fragment,
 } from 'react';
 import ReactDOM from 'react-dom';
 import styled from '@emotion/styled'
 import './extensions'
+import { MAX_GUESSES } from './constants'
 import { ResultRow } from './components/result-row.jsx'
+import { FailedRow } from './components/failed-row.jsx'
+import { StatsRow } from './components/stats-row.jsx'
 import { WordInput } from './components/word-input.jsx'
 import { run } from './processor'
 import { useDictionary } from './hooks/useDictionary'
@@ -24,7 +28,11 @@ const App = () => {
   const dictionary = useDictionary()
   const handleSubmit = word =>
     setResults(
-      run(word, { dictionary, onResult: setResults })
+      run(word, { 
+        dictionary, 
+        onResult: setResults,
+        random: false,
+      })
     )
   
   return <div>
@@ -34,12 +42,12 @@ const App = () => {
     />
     <ResultContainer>
       {results.guessResults.map(([guess, result], i) =>
-        <ResultRow
-          key={guess}
-          guess={guess}
-          result={result}
-        />
+        <Fragment key={guess}>
+          {i === MAX_GUESSES && <FailedRow />}
+          <ResultRow guess={guess} result={result} />
+        </Fragment>
       )}
+      <StatsRow {...results} />
     </ResultContainer>
   </div>
 }

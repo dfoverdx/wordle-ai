@@ -66,7 +66,7 @@ export const run = (
     )
     
     const useDecisive =
-      !nextTry &&
+      !nextTry && !random &&
       i < maxGuesses - 1 && (
         preferDecisive
           ? words.length > 1
@@ -84,6 +84,8 @@ export const run = (
     nextTry = null
     
     lucky = !useDecisive && lucky
+    shuffled = !useDecisive && shuffled
+    
     if (!word) {
       word = words.chooseRandom()
       lucky = true
@@ -136,15 +138,19 @@ export const run = (
     
     if (!words.includes(todaysWord)) {
       l('Removed today\'s word 😵')
+      throw new Error('Removed today\'s word 😵')
     }
     
     if (!words.length) {
       l('No words? 🤨')
-      break
+      throw new Error('No words? 🤨')
     }
 
+    word === 'DAZED' && l(words)
     if (!shuffled && processor.unknown === 1) {
       shuffled = true
+      l(words.length)
+      l(maxGuesses - i)
       if (words.length >= maxGuesses - i) {
         lucky = true
       }
@@ -243,9 +249,10 @@ export class Processor {
     return printMethods(this.print > 0).l
   }
   
-  sortByWordRank(slow = false) {
-    slow ? this._sortSlow() : this._sortFast()
-    return this.words
+  sortByWordRank() {
+    this._sortLetterFrequency()
+    this._sortLetterPerPositionFrequency()
+    return this._sortUniqueLetters()
   }
   
   get unknown() {
@@ -253,7 +260,7 @@ export class Processor {
   }
   
   next(word, result) {
-    let { words, known, unknown } = this
+    let { words, known, unknown, wordLen } = this
     
     const arr = result.map((c, i) => [word[i], c])
 
@@ -287,15 +294,44 @@ export class Processor {
       )
     )
 
+    const knownCounts = getLetterCounts(known)
+    const yellowGreenCounts = getLetterCounts(
+      arr
+        .filter(x => x[1] === YELLOW || x[1] == GREEN)
+        .map(x => x[0])
+    )
+
     arr.forEach(([c, r], i) => {
       if (r !== YELLOW) {
         return
       }
       
-      words = words
-        .filter(w => w[i] !== c)
-        .filter(w => w.includes(c))
+      words = words.filter(w => w[i] !== c)
+      
+      if (!knownCounts[c]) {
+        words = words.filter(w => w.includes(c))
+      } else if (yellowGreenCounts[c] > knownCounts[c]) {
+        this.decisiveGuesses.delete(c)
+        
+        words = words.filter(w => {
+          for (let i = 0; i < knownCounts[c]; i++) {
+            w = w.replace(c, '_')
+          }
+          
+          return w.includes(c)
+        })
+      }
     })
+    
+    for (let i = 0; i < wordLen; i++) {
+      if (known[i]) {
+        continue;
+      }
+      
+      if (words.every(w => w[i] === words[0][i])) {
+        known[i] = words[0][i]
+      }
+    }
 
     this.words = words
     return words
@@ -334,7 +370,7 @@ export class Processor {
         getLetterCounts(w)[c] > (knownCounts[c] || 0)
       )).size
     
-    let decisiveValues = allWords
+    let decisive = allWords
       .filter(w =>
         !guessed.has(w) &&
         w.some(c => possibleLetters.has(c))
@@ -344,9 +380,10 @@ export class Processor {
       .sort((a, b) => b[1] - a[1])
       .filter((x, _, a) => x[1] === a[0][1])
       .map(x => x[0])
+      //.shuffle()
       
     if (words.length < 15 && goBallsDeep) {
-      decisiveValues = decisiveValues
+      decisive = decisive
         .map((g, i) => {
           const val = words.reduce((a, w) => {
             const p = _.cloneDeep(this);
@@ -371,7 +408,7 @@ export class Processor {
         .map(x => x[0])
     }
     
-    const word = decisiveValues[0]
+    const word = decisive[0]
 
     if (!word) {
       return null
@@ -379,12 +416,6 @@ export class Processor {
     
     word.forEach(c => decisiveGuesses.add(c))
     return word
-  }
-  
-  _sortFast() {
-    this._sortLetterFrequency()
-    this._sortLetterPerPositionFrequency()
-    return this._sortUniqueLetters()
   }
   
   _sortLetterFrequency() {
@@ -446,33 +477,6 @@ export class Processor {
       uniqueCompValue(a) - uniqueCompValue(b)
     )
   }
-  
-  _sortSlow() {
-    let { words, known } = this;
-    
-    const calcRulesOut = word => {
-      const notWord = words.filter(w => w !== word)
-      const tmp = new Processor([ ...notWord ])
-      const reset = () => {
-        tmp.words = [ ...notWord ]
-        tmp.known = [ ...known ]
-      }
-
-      return notWord.reduce((a, w) => {
-        reset()
-        return a + 
-          words.length - 
-          tmp.next(word, tryWord(w, word)).length
-      }, 0)
-    }
-    
-    const rulesOut = Object.fromEntries(
-      words.map(w => [w, calcRulesOut(w)])
-    )
-    
-    words.sort((a, b) => rulesOut[b] - rulesOut[a])
-    return words
-  }
 }
 
 const noop = () => {}
@@ -485,149 +489,9 @@ export const fArr = x => Array.from(x)
 export const newFilledArray = (n, cb = () => null) =>
   new Array(n).fill().map(cb)
 
-//const getNLetterWords = async (n = WORD_LEN) => {
-//  wPath = wordsPath(n)
-//  if (fs.existsSync(wPath)) {
-//    return fs.readFileSync(wPath)
-//      .toString()
-//      .toUpperCase()
-//      .split(/\r?\n/)
-//  }
-//    
-//  const text = fs.readFileSync(dictPath)
-//    .toString()
-//    .toUpperCase()
-//  const regex = new RegExp(`^[A-Z]${n}$`)
-//  const filtered = text
-//    .split(/\r?\n/)
-//    .filter(s => regex.test(s))
-//      
-//  fs.writeFileSync(wPath, filtered.join('\n'))
-//  return filtered
-//}
-  
-//const addAndRerun = (word, options) => {
-//  const text = fs.readFileSync(dictPath)
-//    .toString()
-//    .toUpperCase()
-//    
-//  fs.writeFileSync(
-//    dictPath, 
-//    text.split(/\r?\n/g)
-//      .concat(word.toUpperCase())
-//      .sort()
-//      .join('\n')
-//  )
-//    
-//  delete Processor.words
-//  fs.unlinkSync(wordsPath(word.length))
-//  return run(word, options)
-//}
-
 const calcRanks = counts =>
   Object.fromEntries(
     Object.entries(counts)
       .sort((a, b) => b[1] - a[1])
       .map((e, i) => [e[0], i])
   )
-
-/*
-const stats = async (
-  wordLen = WORD_LEN,
-  maxGuesses = MAX_GUESSES
-) => {
-  await Processor.init(wordLen, maxGuesses)
-  const words = Processor.words[wordLen]
-  const results = []
-  let luckyCount = 0
-  
-  for (let i = 0; i < 5; i++) {
-    const word = words.chooseRandom()
-    l(word)
-    const [g, l] = await run(
-      word,
-      { print: false }
-    )
-    
-    results.push(g)
-    l && luckyCount++
-  }
-    
-  const sum = arr => arr.reduce((a, n) => a + n, 0)
-  const avg = arr => avg(arr) / arr.length
-  const roundPercent = (n, d = 3) =>
-    `${Math.roundTo(n, d) * 100}%`
-
-  const histo = results.reduce((a, n) =>
-    (++a[n], a),
-    new Array(wordLen + 1).fill(0)
-  )
-    
-  const { wins, losses } = results.reduce((a, n) =>
-    (++a[n <= maxGuesses ? 'wins' : 'losses'], a),
-    { wins: 0, losses: 0 }
-  )
-    
-  l(Math.roundTo(avg(r), 3))
-  l(`Wins:   ${wins}`)
-  l(`Losses: ${losses}`)
-  l(`Ratio:  ${Math.roundTo(wins / losses)}`)
-  l(`Win%:   ${roundPercent(wins / r.length)}`)
-  l(`Lose%:  ${roundPercent(losses / r.length)}`)
-  l(`Lucky%: ${roundPercent(luckyCount / r.length)}`)
-    
-  l('\nDistrobution:')
-  l(Object.entries(histo)
-    .map(x => x.join(': '))
-    .join('\n')
-  )
-}
-*/
-
-export const list = (word, last = Infinity) => {
-  const words = loadWordleHistory()
-  if (word) {
-    addWordToHistory(word, words)
-  }
-  
-  for (const w of words.slice(-last)) {
-    lje(
-      w, ': ',
-      run(w, { 
-        print: last <= 3, 
-        addToHistory: false,
-      })
-    )
-  }
-}
-
-//const loadWordleHistory = () => {
-//  if (!fs.existsSync(historyPath)) {
-//    // hopefully never gets here
-//    saveWordleHistory([])
-//  }
-//  
-//  return fs.readFileSync(historyPath)
-//    .toString()
-//    .split(/\r?\n/)
-//}
-
-//const addWordToHistory = (word, words) => {
-//  word = word.toUpperCase()
-//  words = words || loadWordleHistory()
-//  words = words.map(w => w.toUpperCase())
-//  
-//  if (!words.includes(word)) {
-//    words.push(word)
-//    saveWordleHistory(words)
-//  }
-//}
-//
-//const saveWordleHistory = words =>
-//  fs.writeFileSync(historyPath, words.join('\n'))
-
-//export const history = {
-//  load: loadWordleHistory,
-//  save: saveWordleHistory,
-//  addWord: addWordToHistory,
-//}

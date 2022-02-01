@@ -19,7 +19,7 @@ export const ResultRow = ({ guess, result }) =>
   <ResultRowContainer>
     {result.map((r, i) =>
       <ResultItem key={guess + i} result={r}>
-        {guess[i]}
+        <span>{guess[i]}</span>
       </ResultItem>
     )}
   </ResultRowContainer>
@@ -38,6 +38,11 @@ const ResultItem = styled('div', {
   background-color: ${({ result }) => bgColors[result]};
   margin: 2px;
   display: flex;
-  align-content: space-around;
-  justify-content: space-around;
+  align-content: center;
+  justify-content: center;
+  
+  & > span {
+    line-height: 1;
+    margin: auto;
+  }
 `
