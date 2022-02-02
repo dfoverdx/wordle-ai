@@ -29,6 +29,8 @@ export const run = (
     nextTry = null,
     processor = null,
   } = options
+  
+  let hardMode = true
 
   const wordLen = todaysWord.length
   
@@ -70,10 +72,10 @@ export const run = (
       i < maxGuesses - 1 && (
         preferDecisive
           ? words.length > 1
-          : processor.unknown <= 2 &&
+          : processor.unknown <= 3 &&
             words.length > maxGuesses - i
       )
-
+    
     let word = nextTry ||
       (useDecisive
         ? processor.getDecisiveWord(i)
@@ -83,8 +85,11 @@ export const run = (
     
     nextTry = null
     
-    lucky = !useDecisive && lucky
-    shuffled = !useDecisive && shuffled
+    if (useDecisive) {
+      lucky = false
+      shuffled = false
+      hardMode = false
+    }
     
     if (!word) {
       word = words.chooseRandom()
@@ -115,6 +120,7 @@ export const run = (
         guessResults,
         lucky,
         wordsLeft: words.length - 1,
+        hardMode,
       }
     }
     
@@ -122,6 +128,7 @@ export const run = (
       guessResults,
       lucky,
       wordsLeft: words.length - 1,
+      hardMode,
     })
   
     words = processor.next(word, result)

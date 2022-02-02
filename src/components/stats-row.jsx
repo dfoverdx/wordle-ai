@@ -1,5 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import ClearIcon from '@mui/icons-material/Clear'
+import CheckIcon from '@mui/icons-material/Check'
 import { MAX_GUESSES } from '../constants'
 
 const Row = styled.div`
@@ -17,21 +19,37 @@ const Cell = styled('div', {
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-content: center;
+  flex: 1;
   
   & > :first-child {
-    color: ${p => p.color || 'black'};
+    ${({ color }) => ({ color })};
     font-size: 30px;
   }
   
   & > :last-child {
     font-size: 20px;
+    text-align: center;
   }
+`
+
+const HardModeIcon = styled(({ hardMode, className }) =>
+  hardMode 
+    ? <CheckIcon className={className} />
+    : <ClearIcon className={className} />
+)`
+  color: ${
+    p => p.hardMode ? '#67CE66' : 'red'
+  };
+  height: 36px;
+  display: block;
 `
 
 export const StatsRow = ({
   guessResults,
   lucky,
   wordsLeft,
+  hardMode,
 }) =>
   !guessResults.length
     ? null
@@ -44,8 +62,19 @@ export const StatsRow = ({
           }
         >
           <span>{guessResults.length}</span>
-          <span>guesses</span>
+          <span>
+            {guessResults.length === 1
+              ? 'guess'
+              : 'guesses'
+            }
+          </span>
         </Cell>
+        {guessResults.length <= MAX_GUESSES &&
+          <Cell>
+            <HardModeIcon hardMode={hardMode} />
+            <span>hard mode</span>
+          </Cell>
+        }
         <Cell
           color={lucky ? '#F1A33C' : '#3B81F6'}
         >
