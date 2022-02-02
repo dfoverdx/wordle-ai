@@ -34,7 +34,7 @@ Played by AI by Bethany Hitch`,
     }
   >
     <ShareIcon />
-    </IconButton>
+  </IconButton>
 )`
   ${p => 
     !(
