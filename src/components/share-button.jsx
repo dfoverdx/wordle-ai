@@ -21,7 +21,12 @@ const ShareButton = styled(({
             : guessResults.length
         }/6
 
-${guessResults.slice(0, 6).map(gr => gr[1].join('')).join('\n')}
+${
+  guessResults
+    .slice(0, 6)
+    .map(gr => gr[1].join(''))
+    .join('\n')
+}
 
 Played by AI by Bethany Hitch`,
       })
