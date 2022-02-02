@@ -6,11 +6,7 @@ const path = require('path')
 
 const l = console.log.bind(console)
 
-const p = path.resolve(
-  __dirname,
-  '../../../bundles',
-  'MY-RN-APPD9051D4B-19E1-442F-83A2-6D52B0D8BF2E/data',
-)
+const dataPath = path.resolve(__dirname, 'data')
 
 // Setup
 const app = express();
@@ -27,7 +23,7 @@ const middleware = webpackMiddleware(compiler, {
   }
 });
 app.use(middleware);
-app.use('/data', express.static(p))
+app.use('/data', express.static(dataPath))
 app.get('/', (req, res) => {
   res.sendFile('index.html', { root: __dirname });
 });

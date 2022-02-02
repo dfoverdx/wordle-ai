@@ -15,6 +15,7 @@ import { StatsRow } from './components/stats-row.jsx'
 import { WordInput } from './components/word-input.jsx'
 import { run } from './processor'
 import { useDictionary } from './hooks/useDictionary'
+import Settings from './components/settings'
 
 const ResultContainer = styled('div')`
   display: flex;
@@ -24,7 +25,11 @@ const ResultContainer = styled('div')`
 const App = () => {
   const [ results, setResults ] = useState({
     guessResults: []
-  });
+  })
+  const [settings, setSettings] = useState({
+    hideText: false
+  })
+  
   const dictionary = useDictionary()
   const handleSubmit = word =>
     setResults(
@@ -35,16 +40,29 @@ const App = () => {
       })
     )
   
+  const hasResult = !!results.guessResults.length
+  
   return <div>
+    <Settings 
+      settings={settings}
+      onChange={setSettings}
+      hasResult={hasResult}
+    />
     <WordInput
       dictionary={dictionary}
       onSubmit={handleSubmit}
+      settings={settings}
+      hasResult={hasResult}
     />
     <ResultContainer>
       {results.guessResults.map(([guess, result], i) =>
         <Fragment key={guess}>
           {i === MAX_GUESSES && <FailedRow />}
-          <ResultRow guess={guess} result={result} />
+          <ResultRow 
+            guess={guess}
+            result={result}
+            settings={settings}
+          />
         </Fragment>
       )}
       <StatsRow {...results} />

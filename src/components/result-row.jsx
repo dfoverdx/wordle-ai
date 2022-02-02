@@ -12,11 +12,13 @@ const ResultRowContainer = styled('div')`
   justify-content: center;
   font-size: 40px;
   font-family: 'menlo-regular';
-  color: white;
+  color: ${p => 
+    p.hideText ? 'transparent' : 'white'
+  };
 `
 
-export const ResultRow = ({ guess, result }) =>
-  <ResultRowContainer>
+export const ResultRow = ({ guess, result, settings }) =>
+  <ResultRowContainer {...settings}>
     {result.map((r, i) =>
       <ResultItem key={guess + i} result={r}>
         <span>{guess[i]}</span>

@@ -4,13 +4,41 @@ import {
   Button
 } from '@mui/material'
 import styled from '@emotion/styled'
+import moment from 'moment'
 
-const Container = styled('div')`
-  width: 100%;
+const WORDLE_DAY_0 = moment('2022-02-02')
+  .subtract(228, 'days')
+
+const InputContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
   flex-wrap: nowrap;
+`
+
+const Header = styled.h1`
+  font-size: 1.5rem;
+  font-family: sans-serif;
+  font-weight: 400;
+`
+
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  
+  ${InputContainer} {
+    ${p => 
+      p.hasResult && p.hideText && { display: 'none' }
+    }
+  }
+  
+  ${Header} {
+    ${p =>
+      !(p.hideText && p.hasResult) && { display: 'none' }
+    }
+  }
 `
 
 const Input = styled(MUIInput)`
@@ -20,7 +48,12 @@ const Input = styled(MUIInput)`
   padding-left: 4px;
 `
 
-export const WordInput = ({ onSubmit, dictionary }) => {
+export const WordInput = ({ 
+  onSubmit,
+  dictionary,
+  settings,
+  hasResult,
+}) => {
   const [value, setValue] = useState(
     localStorage.getItem('word') || ''
   )
@@ -53,21 +86,26 @@ export const WordInput = ({ onSubmit, dictionary }) => {
   }
   
   return (
-    <Container>
-      <Input
-        maxLength={5} 
-        onChange={handleChange}
-        onFocus={e => e.target.select()}
-        value={value}
-        onKeyDown={handleKeyDown}
-        disabled={!dictionary.length}
-      />
-      <Button
-        disabled={!valid}
-        onClick={handleSubmit}
-      >
-        Go
-      </Button>
+    <Container {...settings} hasResult={hasResult}>
+      <Header>
+        Wordle {moment().diff(WORDLE_DAY_0, 'days')}
+      </Header>
+      <InputContainer>
+        <Input
+          maxLength={5} 
+          onChange={handleChange}
+          onFocus={e => e.target.select()}
+          value={value}
+          onKeyDown={handleKeyDown}
+          disabled={!dictionary.length}
+        />
+        <Button
+          disabled={!valid}
+          onClick={handleSubmit}
+        >
+          Go
+        </Button>
+      </InputContainer>
     </Container>
   )
 }
