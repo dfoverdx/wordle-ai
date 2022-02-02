@@ -20,7 +20,8 @@ export const run = (
     maxGuesses = MAX_GUESSES,
     print = true,
     dictionary = [],
-    onResult = () => {}
+    onResult = () => {},
+    decisiveThreshold = 3,
   } = options
   
   const { l, lj, ljs, lje } = printMethods(print)
@@ -72,7 +73,7 @@ export const run = (
       i < maxGuesses - 1 && (
         preferDecisive
           ? words.length > 1
-          : processor.unknown <= 3 &&
+          : processor.unknown <= decisiveThreshold &&
             words.length > maxGuesses - i
       )
     
@@ -115,6 +116,10 @@ export const run = (
             : 'unlucky'
           : ''
       )
+      
+      if (words.length < 21) {
+        l(words)
+      }
       
       return {
         guessResults,

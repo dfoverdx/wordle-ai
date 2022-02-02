@@ -37,7 +37,8 @@ const App = () => {
     guessResults: []
   })
   const [settings, setSettings] = useState({
-    hideText: false
+    hideText: false,
+    decisiveThreshold: 3,
   })
   
   const dictionary = useDictionary()
@@ -47,6 +48,7 @@ const App = () => {
         dictionary, 
         onResult: setResults,
         random: false,
+        decisiveThreshold: settings.decisiveThreshold,
       })
     )
   
