@@ -17,7 +17,9 @@ const ShareButton = styled(({
       navigator.share({
         text: `Wordle ${WORDLE_PUZZLE_NUMBER} ${guessResulrs.length}/6
 
-${guessResults.map(gr => gr.result.join('')).join('\n')}`,
+${guessResults.map(gr => gr.result.join('')).join('\n')}
+
+Played by AI by Bethany Hitch`,
       })
         .then(() => l('success'))
         .catch(e => l(e.message))
