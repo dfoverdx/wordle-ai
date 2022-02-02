@@ -6,10 +6,9 @@ export const useDictionary = () => {
   useEffect(() => {
     fetch('./data/5-letter-words.txt')
       .then(res => res.text())
-      .then(body => {
-        
+      .then(body => 
         setVal(body.toUpperCase().split('\n'))
-      })
+      )
       .catch(e => console.error(e.message))
   }, [])
   
