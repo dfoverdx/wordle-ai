@@ -4,10 +4,7 @@ import {
   Button
 } from '@mui/material'
 import styled from '@emotion/styled'
-import moment from 'moment'
-
-const WORDLE_DAY_0 = moment('2022-02-02')
-  .subtract(228, 'days')
+import { WORDLE_PUZZLE_NUMBER } from './helpers'
 
 const InputContainer = styled.div`
   display: flex;
@@ -88,7 +85,7 @@ export const WordInput = ({
   return (
     <Container {...settings} hasResult={hasResult}>
       <Header>
-        Wordle {moment().diff(WORDLE_DAY_0, 'days')}
+        Wordle {WORDLE_PUZZLE_NUMBER}
       </Header>
       <InputContainer>
         <Input
