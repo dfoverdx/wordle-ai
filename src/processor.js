@@ -50,7 +50,7 @@ export const run = (
   )
   
   let words = processor.words
-  let PAD = 0
+  let padLength = 0
   
   if (!words.includes(todaysWord)) {
     l('Word not in dictionary 😵‍💫')
@@ -125,13 +125,13 @@ export const run = (
     })
   
     words = processor.next(word, result)
-    !i && (PAD = words.length.toString().length)
+    !i && (padLength = words.length.toString().length)
     
     ljs(
       word,
       result.join(''),
       '|',
-      words.length.toString().padStart(PAD),
+      words.length.toString().padStart(padLength),
       words.length === 1 ? 'word' : 'words',
       'left'
     )
@@ -146,7 +146,6 @@ export const run = (
       throw new Error('No words? 🤨')
     }
 
-    word === 'DAZED' && l(words)
     if (!shuffled && processor.unknown === 1) {
       shuffled = true
       l(words.length)
@@ -403,7 +402,7 @@ export class Processor {
             
             return a + lucky ? 1 / wordsLeft : 1
           }, 0)
-
+          
           return [ g, val ]
         })
         .sort((a, b) => b[1] - a[1])

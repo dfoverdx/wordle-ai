@@ -30,11 +30,11 @@ ${
 Played by AI by Bethany Hitch`,
       })
         .then(() => l('success'))
-        .catch(e => l(e.message))}
+        .catch(e => l(e.message))
     }
   >
     <ShareIcon />
-  </IconButton>
+    </IconButton>
 )`
   ${p => 
     !(
