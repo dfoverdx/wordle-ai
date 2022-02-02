@@ -21,15 +21,9 @@ const DecisiveThreshold = ({
   onChange,
   settings: { decisiveThreshold },
 }) => {
-  const [ tmp, setTmp ] = useState(null)
   const handleChange = useCallback(
-    (_, val) => setTmp(val),
-    []
-  )
-  const handleChangeCommitted = useCallback(
     (_, val) => {
       onChange({ decisiveThreshold: val })
-      setTmp(null)
     },
     [onChange]
   )
@@ -43,7 +37,7 @@ const DecisiveThreshold = ({
         marks
         min={0}
         max={WORD_LEN}
-        value={tmp == null ? decisiveThreshold : tmp}
+        value={decisiveThreshold}
         valueLabelDisplay="auto"
         valueLabelFormat={v =>
           !v ? 'Hard mode' :
@@ -51,7 +45,6 @@ const DecisiveThreshold = ({
           `${v} unknown letters`
         }
         onChange={handleChange}
-        onChangeCommitted={handleChangeCommitted}
       />
     </FormGroup>
   )
