@@ -7,13 +7,6 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import styled from '@emotion/styled'
 import HideTextToggle from './hide-text-toggle.jsx'
 
-const ButtonContainer = styled.div`
-  position: absolute;
-  right: 0;
-  top: 0;
-  margin: 8px;
-`
-
 const Drawer = styled(SwipeableDrawer)`
   & .MuiDrawer-paper {
     padding: .5rem 1rem;
@@ -29,11 +22,9 @@ export const Settings = ({ onChange, settings }) => {
     onChange({ ...settings, ...s })
   
   return <>
-    <ButtonContainer>
-      <IconButton onClick={handleClick}>
-        <SettingsIcon />
-      </IconButton>
-    </ButtonContainer>
+    <IconButton onClick={handleClick}>
+      <SettingsIcon />
+    </IconButton>
     <Drawer
       open={open}
       onClose={handleClose}

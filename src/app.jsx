@@ -16,10 +16,20 @@ import { WordInput } from './components/word-input.jsx'
 import { run } from './processor'
 import { useDictionary } from './hooks/useDictionary'
 import Settings from './components/settings'
+import ShareButton from './components/share-button.jsx'
 
 const ResultContainer = styled('div')`
   display: flex;
   flex-direction: column;
+`
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 8px;
 `
 
 const App = () => {
@@ -43,11 +53,14 @@ const App = () => {
   const hasResult = !!results.guessResults.length
   
   return <div>
-    <Settings 
-      settings={settings}
-      onChange={setSettings}
-      hasResult={hasResult}
-    />
+    <ButtonsContainer>
+      <ShareButton results={results} />
+      <Settings
+        settings={settings}
+        onChange={setSettings}
+        hasResult={hasResult}
+      />
+    </ButtonsContainer>
     <WordInput
       dictionary={dictionary}
       onSubmit={handleSubmit}
