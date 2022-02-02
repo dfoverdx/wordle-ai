@@ -52,7 +52,7 @@ const App = () => {
   
   const hasResult = !!results.guessResults.length
   
-  return <div>
+  return <>
     <ButtonsContainer>
       <ShareButton results={results} />
       <Settings
@@ -80,7 +80,7 @@ const App = () => {
       )}
       <StatsRow {...results} />
     </ResultContainer>
-  </div>
+  </>
 }
 
 ReactDOM.render(
