@@ -162,6 +162,8 @@ export const run = (
   }
 };
 
+export default run;
+
 export const tryWord = (todaysWord, guess) => {
   if (guess === todaysWord) {
     return newFilledArray(
