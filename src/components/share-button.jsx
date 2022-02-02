@@ -12,8 +12,7 @@ const ShareButton = styled(({
 }) =>
   <IconButton
     className={className}
-    onClick={() => {
-      try {
+    onClick={() =>
       navigator.share({
         text: `Wordle ${WORDLE_PUZZLE_NUMBER} ${
           guessResults.length > 6 
@@ -31,11 +30,8 @@ ${
 Played by AI by Bethany Hitch`,
       })
         .then(() => l('success'))
-        .catch(e => l(e.message))
-      } catch (e) {
-        l(e.message)
-      }
-    }}
+        .catch(e => l(e.message))}
+    }
   >
     <ShareIcon />
   </IconButton>
