@@ -22,8 +22,8 @@ const Container = styled.div`
   
   ${InputContainer} {
     ${p =>
-    p.hasResult && p.hideText && { display: 'none' }
-  }
+      p.hasResult && p.hideText && { display: 'none' }
+    }
   }
 `
 
