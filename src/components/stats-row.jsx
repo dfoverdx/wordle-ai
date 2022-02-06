@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import ClearIcon from '@mui/icons-material/Clear'
 import CheckIcon from '@mui/icons-material/Check'
+import ClearIcon from '@mui/icons-material/Clear'
 
 const Row = styled.div`
   display: flex;
@@ -21,12 +21,12 @@ const Cell = styled('div', {
   align-content: center;
   flex: 1;
   
-  & > :first-child {
+  & > :first-of-type {
     ${({ color }) => ({ color })};
     font-size: 30px;
   }
   
-  & > :last-child {
+  & > :last-of-type {
     font-size: 20px;
     text-align: center;
   }

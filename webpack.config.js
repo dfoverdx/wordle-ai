@@ -1,10 +1,15 @@
 const path = require('path');
-const { DefinePlugin } = require('webpack')
+const {
+  DefinePlugin, 
+  HotModuleReplacementPlugin,
+} = require('webpack')
 
+/** @type {import('webpack').Configuration} */
 module.exports = {
   mode: 'development',
   entry: {
     app: [
+      // 'webpack-hot-middleware/client',
       './src/app.jsx'
     ]
   },
@@ -36,10 +41,10 @@ module.exports = {
         exclude: (m) => { return /node_modules/.test(m) },
         use: [{
           loader: 'url-loader',
-          options: { 
+          options: {
             limit: 8000,
             name: 'images/[hash]-[name].[ext]'
-          } 
+          }
         }]
       }
     ]
@@ -51,6 +56,7 @@ module.exports = {
           .map(([k, v]) => [k, JSON.stringify(v)])
       )
     ),
+    new HotModuleReplacementPlugin()
   ],
   output: {
     filename: '[name].bundle.js',

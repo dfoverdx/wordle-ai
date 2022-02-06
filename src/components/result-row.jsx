@@ -16,13 +16,18 @@ const ResultRowContainer = styled('div')`
   flex-direction: row;
   justify-content: center;
   font-size: 40px;
-  font-family: 'menlo-regular';
-  color: ${p => 
+  font-family: 'menlo-regular', consolas, monospace;
+  color: ${p =>
     p.hideText ? 'transparent' : 'white'
   };
 `
 
-export const ResultRow = ({ guess, result, settings }) =>
+export const ResultRow = ({
+  guess,
+  result,
+  wordsLeft,
+  settings
+}) =>
   <>
     <ResultRowContainer {...settings}>
       {result.map((r, i) =>
@@ -31,13 +36,17 @@ export const ResultRow = ({ guess, result, settings }) =>
         </ResultItem>
       )}
     </ResultRowContainer>
-    <WordsLeftContainer {...settings}>
-      
-    </WordsLeftContainer>
+    {wordsLeft != null &&
+      <WordsLeftContainer {...settings}>
+        {wordsLeft}
+        {wordsLeft === 1 ? ' word ' : ' words '}
+        left
+      </WordsLeftContainer>
+    }
   </>
 
 const bgColors = {
-  [GREEN]:'#67CE66',
+  [GREEN]: '#67CE66',
   [GRAY]: '#8E8E92',
   [YELLOW]: '#F8D74A',
 }

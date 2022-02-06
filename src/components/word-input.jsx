@@ -1,22 +1,17 @@
 import React, { useState } from 'react'
-import { 
-  Input as MUIInput, 
-  Button
-} from '@mui/material'
 import styled from '@emotion/styled'
-import moment from 'moment'
-import { getPuzzleNumber } from './helpers'
+import {
+  Autocomplete,
+  Button,
+  Input as MUIInput
+} from '@mui/material'
+import { CURRENT_PUZZLE_NUMBER } from './helpers'
 
 const InputContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
   flex-wrap: nowrap;
-`
-
-const Header = styled.h1`
-  font-size: 1.5rem;
-  font-weight: 400;
 `
 
 const Container = styled.div`
@@ -26,30 +21,29 @@ const Container = styled.div`
   flex-direction: column;
   
   ${InputContainer} {
-    ${p => 
-      p.hasResult && p.hideText && { display: 'none' }
-    }
-  }
-  
-  ${Header} {
     ${p =>
-      !(p.hideText && p.hasResult) && { display: 'none' }
-    }
+    p.hasResult && p.hideText && { display: 'none' }
+  }
   }
 `
+
+const platform =
+  navigator.userAgent.platform || navigator.platform
 
 const Input = styled(MUIInput, {
   shouldForwardProp: p => p !== 'isPuzzleWord'
 })`
+  padding-left: ${platform === 'Win32' ? 9 : 4}px;
+  font-family: 'menlo-regular', consolas, monospace;
   font-size: 30px;
-  font-family: 'menlo-regular';
   width: 100px;
-  padding-left: 4px;
   
   ${p => p.isPuzzleWord && { fontWeight: 800 }}
 `
 
-export const WordInput = ({ 
+const useAutocomplete = false;
+
+export const WordInput = ({
   onSubmit,
   dictionaries: [puzzleWords, allWords],
   settings,
@@ -58,24 +52,21 @@ export const WordInput = ({
   const [word, setWord] = useState(
     localStorage.getItem('word') || ''
   )
-  
+
   if (!allWords.length) {
     return null
   }
-  
-  const valid = 
+
+  const valid =
     word.length === 5 && allWords.includes(word)
-  
   const isPuzzleWord =
     valid && puzzleWords.includes(word)
-  const puzzleNumber =
-    isPuzzleWord && getPuzzleNumber(puzzleWords, word)
-  
+
   const handleChange = e => {
     const val = e.target.value
     setWord(val.slice(0, 5).toUpperCase())
   }
-  
+
   const handleKeyDown = e => {
     if (valid && (
       e.key === 'Return' ||
@@ -85,26 +76,48 @@ export const WordInput = ({
       handleSubmit()
     }
   }
-  
+
   const handleSubmit = () => {
     localStorage.setItem('word', word)
     onSubmit({ word, isPuzzleWord })
   }
-  
+
+  const input =
+    useAutocomplete
+      ? <Autocomplete
+        autoComplete
+        autoHighlight
+        options={
+          puzzleWords.slice(0, CURRENT_PUZZLE_NUMBER)
+        }
+        onChange={handleChange}
+        onFocus={e => e.target.select()}
+        value={word}
+        inputValue={word}
+        onKeyDown={handleKeyDown}
+        freeSolo
+        renderInput={({ inputProps }) =>
+          <Input
+            maxLength={5}
+            isPuzzleWord={isPuzzleWord}
+            value={word}
+            {...inputProps}
+          />
+        }
+      />
+      : <Input
+        maxLength={5}
+        isPuzzleWord={isPuzzleWord}
+        onChange={handleChange}
+        onFocus={e => e.target.select()}
+        value={word}
+        onKeyDown={handleKeyDown}
+      />
+
   return (
     <Container {...settings} hasResult={hasResult}>
-      <Header>
-        Wordle {puzzleNumber}
-      </Header>
       <InputContainer>
-        <Input
-          maxLength={5} 
-          onChange={handleChange}
-          onFocus={e => e.target.select()}
-          value={word}
-          onKeyDown={handleKeyDown}
-          isPuzzleWord={isPuzzleWord}
-        />
+        {input}
         <Button
           disabled={!valid}
           onClick={handleSubmit}

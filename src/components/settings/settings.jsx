@@ -1,4 +1,4 @@
-import React, { useState, useCallback, memo } from 'react'
+import React, { useState, memo } from 'react'
 import { 
   IconButton, 
   Drawer as MUIDrawer
