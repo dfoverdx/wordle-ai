@@ -103,7 +103,13 @@ const App = () => {
       <ResultContainer hasResult={hasResult}>
         <Header>
           {isPuzzleWord
-            ? <>Wordle {puzzleNumber || '???'}</>
+            ? <>
+              Wordle{' '}
+              {puzzleNumber === false 
+                ? '???'
+                : puzzleNumber
+              }
+            </>
             : 'Non-Wordle puzzle'
           }
         </Header>
