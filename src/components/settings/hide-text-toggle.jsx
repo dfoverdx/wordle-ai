@@ -1,26 +1,11 @@
 import React from 'react'
-import { 
-  FormGroup, 
-  FormControlLabel, 
-  Switch 
-} from '@mui/material'
+import SettingToggle from './setting-toggle.jsx'
 
-const HideTextToggle = ({ 
-  settings: { hideText }, 
-  onChange, 
-}) =>
-  <FormGroup>
-    <FormControlLabel
-      control={
-        <Switch
-          checked={hideText}
-          onChange={() => 
-            onChange({ hideText: !hideText })
-          }
-        />
-      }
-      label="Hide text"
-    />
-  </FormGroup>
-  
+const HideTextToggle = props =>
+  <SettingToggle
+    {...props}
+    setting="hideText"
+    label="Hide text"
+  />
+
 export default HideTextToggle

@@ -72,7 +72,7 @@ const App = () => {
         onResult: setResults,
         random: settings.random,
         decisiveThreshold: settings.decisiveThreshold,
-        doShuffle: false,
+        doShuffle: settings.doShuffle,
       })
     )
 
@@ -103,9 +103,7 @@ const App = () => {
       <ResultContainer hasResult={hasResult}>
         <Header>
           {isPuzzleWord
-            ? puzzleNumber
-              ? <>Wordle {puzzleNumber}</>
-              : 'Future Wordle'
+            ? <>Wordle {puzzleNumber || '???'}</>
             : 'Non-Wordle puzzle'
           }
         </Header>

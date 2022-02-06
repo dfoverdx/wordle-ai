@@ -1,11 +1,20 @@
-import React, { useState } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useRef,
+} from 'react'
 import styled from '@emotion/styled'
 import {
   Autocomplete,
   Button,
-  Input as MUIInput
+  Input as MUIInput,
 } from '@mui/material'
 import { CURRENT_PUZZLE_NUMBER } from './helpers'
+import moment from 'moment'
+
+const lastPlay = moment(
+  Number(localStorage.getItem('lastPlay')) || 0
+).endOf('day')
 
 const Container = styled.div`
   width: 100%;
@@ -41,9 +50,30 @@ export const WordInput = ({
   settings,
   hasResult,
 }) => {
-  const [word, setWord] = useState(
-    localStorage.getItem('word') || ''
-  )
+  const [word, setWord] = useState('')
+  const playedRef = useRef(false);
+
+  useEffect(() => {
+    if (puzzleWords.length && !playedRef.current) {
+      playedRef.current = true
+
+      const today = moment().endOf('day')
+      if (today.diff(lastPlay, 'days') === 1) {
+        const word = puzzleWords[CURRENT_PUZZLE_NUMBER]
+        setWord(word)
+        setTimeout(() => {
+          localStorage.setItem('word', word)
+          localStorage.setItem('lastPlay', Date.now())
+          onSubmit({
+            word,
+            isPuzzleWord: puzzleWords.includes(word) 
+          })
+        })
+      } else {
+        setWord(localStorage.getItem('word') || '')
+      }
+    }
+  }, [puzzleWords, onSubmit])
 
   if (!allWords.length) {
     return null
@@ -71,6 +101,7 @@ export const WordInput = ({
 
   const handleSubmit = () => {
     localStorage.setItem('word', word)
+    localStorage.setItem('lastPlay', Date.now())
     onSubmit({ word, isPuzzleWord })
   }
 

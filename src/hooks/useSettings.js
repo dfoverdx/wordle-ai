@@ -1,15 +1,16 @@
 import { useState, useCallback } from 'react'
 import _ from 'lodash'
 
-const getInitialSettings = () => JSON.parse(
-  localStorage.getItem('settings') ||
-  JSON.stringify({
-    hideText: false,
-    decisiveThreshold: 2,
-    random: false,
-    showWordsLeft: false,
-  })
-)
+const getInitialSettings = () => ({
+  hideText: false,
+  decisiveThreshold: 2,
+  random: false,
+  showWordsLeft: false,
+  doShuffle: true,
+  ...JSON.parse(
+    localStorage.getItem('settings') || '{}'
+  )
+})
 
 const useSettings = () => {
   const [settings, _setSettings] = 

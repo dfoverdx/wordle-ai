@@ -1,26 +1,11 @@
 import React from 'react'
-import { 
-  FormGroup, 
-  FormControlLabel, 
-  Switch 
-} from '@mui/material'
+import SettingToggle from './setting-toggle.jsx'
 
-const ShowWordsLeftToggle = ({ 
-  settings: { showWordsLeft }, 
-  onChange, 
-}) =>
-  <FormGroup>
-    <FormControlLabel
-      control={
-        <Switch
-          checked={showWordsLeft}
-          onChange={() => 
-            onChange({ showWordsLeft: !showWordsLeft })
-          }
-        />
-      }
-      label="Show words left"
-    />
-  </FormGroup>
+const ShowWordsLeftToggle = props =>
+  <SettingToggle
+    {...props}
+    setting="showWordsLeft"
+    label="Show words left"
+  />
   
 export default ShowWordsLeftToggle
