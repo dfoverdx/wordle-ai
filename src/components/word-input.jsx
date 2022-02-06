@@ -7,24 +7,16 @@ import {
 } from '@mui/material'
 import { CURRENT_PUZZLE_NUMBER } from './helpers'
 
-const InputContainer = styled.div`
-  display: flex;
+const Container = styled.div`
+  width: 100%;
+  display: ${p =>
+    p.hasResult && p.hideText
+      ? 'none'
+      : 'flex'
+  };
   align-items: center;
   flex-direction: column;
   flex-wrap: nowrap;
-`
-
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  
-  ${InputContainer} {
-    ${p =>
-      p.hasResult && p.hideText && { display: 'none' }
-    }
-  }
 `
 
 const platform =
@@ -115,16 +107,17 @@ export const WordInput = ({
       />
 
   return (
-    <Container {...settings} hasResult={hasResult}>
-      <InputContainer>
-        {input}
-        <Button
-          disabled={!valid}
-          onClick={handleSubmit}
-        >
-          Go
-        </Button>
-      </InputContainer>
+    <Container
+      hasResult={hasResult}
+      {...settings}
+    >
+      {input}
+      <Button
+        disabled={!valid}
+        onClick={handleSubmit}
+      >
+        Go
+      </Button>
     </Container>
   )
 }
