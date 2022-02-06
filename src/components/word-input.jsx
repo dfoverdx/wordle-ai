@@ -4,7 +4,8 @@ import {
   Button
 } from '@mui/material'
 import styled from '@emotion/styled'
-import { WORDLE_PUZZLE_NUMBER } from './helpers'
+import moment from 'moment'
+import { getPuzzleNumber } from './helpers'
 
 const InputContainer = styled.div`
   display: flex;
@@ -15,7 +16,6 @@ const InputContainer = styled.div`
 
 const Header = styled.h1`
   font-size: 1.5rem;
-  font-family: sans-serif;
   font-weight: 400;
 `
 
@@ -38,33 +38,42 @@ const Container = styled.div`
   }
 `
 
-const Input = styled(MUIInput)`
+const Input = styled(MUIInput, {
+  shouldForwardProp: p => p !== 'isPuzzleWord'
+})`
   font-size: 30px;
   font-family: 'menlo-regular';
   width: 100px;
   padding-left: 4px;
+  
+  ${p => p.isPuzzleWord && { fontWeight: 800 }}
 `
 
 export const WordInput = ({ 
   onSubmit,
-  dictionary,
+  dictionaries: [puzzleWords, allWords],
   settings,
   hasResult,
 }) => {
-  const [value, setValue] = useState(
+  const [word, setWord] = useState(
     localStorage.getItem('word') || ''
   )
   
-  const valid = 
-    value.length === 5 && dictionary.includes(value)
-  
-  if (!dictionary.length) {
+  if (!allWords.length) {
     return null
   }
   
+  const valid = 
+    word.length === 5 && allWords.includes(word)
+  
+  const isPuzzleWord =
+    valid && puzzleWords.includes(word)
+  const puzzleNumber =
+    isPuzzleWord && getPuzzleNumber(puzzleWords, word)
+  
   const handleChange = e => {
     const val = e.target.value
-    setValue(val.slice(0, 5).toUpperCase())
+    setWord(val.slice(0, 5).toUpperCase())
   }
   
   const handleKeyDown = e => {
@@ -78,23 +87,23 @@ export const WordInput = ({
   }
   
   const handleSubmit = () => {
-    localStorage.setItem('word', value)
-    onSubmit(value)
+    localStorage.setItem('word', word)
+    onSubmit({ word, isPuzzleWord })
   }
   
   return (
     <Container {...settings} hasResult={hasResult}>
       <Header>
-        Wordle {WORDLE_PUZZLE_NUMBER}
+        Wordle {puzzleNumber}
       </Header>
       <InputContainer>
         <Input
           maxLength={5} 
           onChange={handleChange}
           onFocus={e => e.target.select()}
-          value={value}
+          value={word}
           onKeyDown={handleKeyDown}
-          disabled={!dictionary.length}
+          isPuzzleWord={isPuzzleWord}
         />
         <Button
           disabled={!valid}

@@ -1,6 +1,7 @@
 const express = require('express');
 const webpack = require('webpack');
-const webpackMiddleware = require('webpack-dev-middleware');
+const webpackMiddleware =
+  require('webpack-dev-middleware');
 const fs = require('fs');
 const path = require('path')
 
@@ -19,8 +20,10 @@ const middleware = webpackMiddleware(compiler, {
   watchOptions: {
     // Due to iOS devices memory constraints
     // disabling file watching is recommended 
-    ignored: /.*/
-  }
+    //ignored: /.*/
+    ignored: /node_modules/
+  },
+  //writeToDisk: true,
 });
 app.use(middleware);
 app.use('/data', express.static(dataPath))

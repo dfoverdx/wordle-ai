@@ -1,4 +1,4 @@
-import React, { 
+import React, {
   Component, 
   useEffect,
   useState,
@@ -8,15 +8,21 @@ import React, {
 import ReactDOM from 'react-dom';
 import styled from '@emotion/styled'
 import './extensions'
-import { MAX_GUESSES } from './constants'
 import { ResultRow } from './components/result-row.jsx'
 import { FailedRow } from './components/failed-row.jsx'
 import { StatsRow } from './components/stats-row.jsx'
 import { WordInput } from './components/word-input.jsx'
-import run from './processor'
-import { useDictionary } from './hooks/useDictionary'
+import run, { runAll } from './ai'
+import useDictionary from './hooks/useDictionary'
 import Settings from './components/settings'
+import useSettings from './hooks/useSettings'
 import ShareButton from './components/share-button.jsx'
+import ErrorBoundary 
+  from './components/error-boundary.jsx'
+
+const AppContainer = styled('div')`
+  font-family: sans-serif;
+`
 
 const ResultContainer = styled('div')`
   display: flex;
@@ -36,25 +42,33 @@ const App = () => {
   const [ results, setResults ] = useState({
     guessResults: []
   })
-  const [settings, setSettings] = useState({
-    hideText: false,
-    decisiveThreshold: 3,
-  })
   
-  const dictionary = useDictionary()
-  const handleSubmit = word =>
+  const [settings, setSettings] = useSettings()
+  const dictionaries = useDictionary()
+  
+  if (RUN_ALL) {
+    useEffect(() => {
+      if (dictionaries[0].length) {
+        runAll(dictionaries)
+      }
+    }, [dictionaries])
+  }
+  
+  const handleSubmit = ({ word, isPuzzleWord }) =>
     setResults(
       run(word, { 
-        dictionary, 
+        dictionaries,
+        isPuzzleWord,
         onResult: setResults,
-        random: false,
+        random: settings.random,
         decisiveThreshold: settings.decisiveThreshold,
+        doShuffle: false,
       })
     )
   
   const hasResult = !!results.guessResults.length
   
-  return <>
+  return <AppContainer><ErrorBoundary>
     <ButtonsContainer>
       <ShareButton results={results} />
       <Settings
@@ -64,7 +78,7 @@ const App = () => {
       />
     </ButtonsContainer>
     <WordInput
-      dictionary={dictionary}
+      dictionaries={dictionaries}
       onSubmit={handleSubmit}
       settings={settings}
       hasResult={hasResult}
@@ -82,7 +96,7 @@ const App = () => {
       )}
       <StatsRow {...results} />
     </ResultContainer>
-  </>
+  </ErrorBoundary></AppContainer>
 }
 
 ReactDOM.render(

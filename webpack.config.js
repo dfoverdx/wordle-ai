@@ -1,4 +1,5 @@
 const path = require('path');
+const { DefinePlugin } = require('webpack')
 
 module.exports = {
   mode: 'development',
@@ -15,10 +16,10 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: [
+            /*presets: [
               '@babel/preset-env',
               '@babel/preset-react'
-            ]
+            ]*/
           }
         }
       },
@@ -43,10 +44,29 @@ module.exports = {
       }
     ]
   },
-  plugins: [],
+  plugins: [
+    new DefinePlugin(
+      Object.fromEntries(
+        Object.entries(require('./constants'))
+          .map(([k, v]) => [k, JSON.stringify(v)])
+      )
+    ),
+  ],
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, './dist'),
     publicPath: '/'
-  }
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
+  },
+  //devtool: false,
 };

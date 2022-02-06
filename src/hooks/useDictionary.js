@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from 'react'
 
-export const useDictionary = () => {
-  const [val, setVal] = useState([])
+const getList = url =>
+  fetch(url)
+    .then(res => res.text())
+    .then(txt => txt.toUpperCase().split('\n'))
+
+const useDictionary = () => {
+  const [val, setVal] = useState([[], []])
 
   useEffect(() => {
-    fetch('./data/5-letter-words.txt')
-      .then(res => res.text())
-      .then(body => 
-        setVal(body.toUpperCase().split('\n'))
+    Promise.all([
+      getList('./data/puzzle-words.txt'),
+      getList('./data/all-words.txt'),
+    ])
+      .then(([p, a]) => 
+        [p, Array.from(new Set([...p, ...a]))]
       )
+      .then(value => setVal(value))
       .catch(e => console.error(e.message))
   }, [])
   
   return val
 }
+
+export default useDictionary

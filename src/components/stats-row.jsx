@@ -2,7 +2,6 @@ import React from 'react'
 import styled from '@emotion/styled'
 import ClearIcon from '@mui/icons-material/Clear'
 import CheckIcon from '@mui/icons-material/Check'
-import { MAX_GUESSES } from '../constants'
 
 const Row = styled.div`
   display: flex;

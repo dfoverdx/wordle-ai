@@ -1,10 +1,15 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import {
-  GREEN,
-  YELLOW,
-  GRAY,
-} from '../constants'
+
+const WordsLeftContainer = styled('div')`
+  display: ${p =>
+    p.showWordsLeft ? 'inline-flex' : 'none'
+  };
+  direction: row;
+  color: gray;
+  font-size: 20px;
+  justify-content: center;
+`
 
 const ResultRowContainer = styled('div')`
   display: inline-flex;
@@ -18,13 +23,18 @@ const ResultRowContainer = styled('div')`
 `
 
 export const ResultRow = ({ guess, result, settings }) =>
-  <ResultRowContainer {...settings}>
-    {result.map((r, i) =>
-      <ResultItem key={guess + i} result={r}>
-        <span>{guess[i]}</span>
-      </ResultItem>
-    )}
-  </ResultRowContainer>
+  <>
+    <ResultRowContainer {...settings}>
+      {result.map((r, i) =>
+        <ResultItem key={guess + i} result={r}>
+          <span>{guess[i]}</span>
+        </ResultItem>
+      )}
+    </ResultRowContainer>
+    <WordsLeftContainer {...settings}>
+      
+    </WordsLeftContainer>
+  </>
 
 const bgColors = {
   [GREEN]:'#67CE66',

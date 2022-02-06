@@ -2,7 +2,10 @@
   "presets": [
     ["@babel/preset-env", {
       "loose": true,
-      "modules": false
+      "modules": "cjs",
+      "targets": {
+        "chrome": "70",
+      },
     }],
 	"@babel/preset-react"
   ],

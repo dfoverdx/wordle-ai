@@ -8,6 +8,27 @@ Math.randInt = (minOrMax, maxOrUndefined) => {
   return Math.floor(Math.random() * range) + min
 }
 
+Math.avg = vals =>
+  vals.reduce((a, v) => a + v, 0) / vals.length
+  
+  
+const _max = Math.max;
+const _min = Math.min;
+
+Math.max = (...vals) =>
+  vals.reduce((m, v) => 
+    Number.isNaN(m)
+      ? v
+      : _max(m, v),
+    NaN)
+    
+Math.min = (...vals) =>
+  vals.reduce((m, v) => 
+    Number.isNaN(m)
+      ? v
+      : _min(m, v),
+    NaN)
+
 Array.prototype.eachAnd = function (cb) {
   this.forEach(cb)
   return this
@@ -24,6 +45,29 @@ Array.prototype.shuffle = function (inPlace = true) {
 Array.prototype.chooseRandom = function () {
   return this[Math.randInt(this.length)]
 }
+
+Object.defineProperty(
+  Array.prototype, 
+  'last',
+  {
+    get() {
+      if (!this.length) {
+        return undefined
+      }
+      
+      return this[this.length - 1]
+    },
+    set(value) {
+      if (!this.length) {
+        throw new Error(
+          'Array must have at least one value to set "last"'
+        )
+      }
+      
+      return this[this.length - 1] = value
+    }
+  }
+)
 
 Promise.sleep = (ms = 0) =>
   new Promise(res => setTimeout(res, ms))
@@ -45,11 +89,14 @@ Object.entries(
 Object.mapObject = (obj, fn) =>
   Object.fromEntries(Object.entries(obj).map(fn))
   
-global.l = console.log.bind(console)
+global.l = (val = '', ...vals) => 
+  console.log(val, ...vals)
+
 l.count = 0
 Object.defineProperty(l, 'x', {
   get() {
-    return l(++l.count)
+    l(++l.count)
+    return l.count
   }
 })
 
@@ -62,3 +109,4 @@ Object.defineProperty(global, 'dbg', {
 global.lj = (sep, ...args) => l(args.join(sep))
 global.ljs = lj.bind(null, ' ')
 global.lje = lj.bind(null, '')
+global.ljn = lj.bind(null, '\n')

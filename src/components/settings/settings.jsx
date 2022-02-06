@@ -5,9 +5,11 @@ import {
 } from '@mui/material'
 import SettingsIcon from '@mui/icons-material/Settings'
 import styled from '@emotion/styled'
+import _ from 'lodash'
 import HideTextToggle from './hide-text-toggle.jsx'
 import DecisiveThreshold from './decisive-threshold.jsx'
-import _ from 'lodash'
+import ShowWordsLeftToggle 
+  from './show-words-left-toggle.jsx'
 
 const Drawer = styled(MUIDrawer)`
   & .MuiDrawer-paper {
@@ -21,10 +23,8 @@ export const Settings = memo(
     
     const handleClick = () => setOpen(true)
     const handleClose = () => setOpen(false)
-    const handleChange = useCallback(
-      s => onChange({ ...settings, ...s }),
-      [settings]
-    )
+    
+    const props = { settings, onChange }
     
     return <>
       <IconButton onClick={handleClick}>
@@ -35,14 +35,9 @@ export const Settings = memo(
         onClose={handleClose}
         anchor="right"
       >
-        <HideTextToggle 
-          settings={settings}
-          onChange={handleChange}
-        />
-        <DecisiveThreshold
-          settings={settings}
-          onChange={handleChange}
-        />
+        <HideTextToggle {...props} />
+        <ShowWordsLeftToggle {...props} />
+        <DecisiveThreshold {...props} />
       </Drawer>
     </>
   },

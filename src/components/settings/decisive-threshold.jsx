@@ -5,7 +5,6 @@ import {
   Slider as MUISlider,
 } from '@mui/material'
 import styled from '@emotion/styled'
-import { WORD_LEN } from '../../constants'
 
 const Slider = styled(MUISlider)`
   width: 200px;
@@ -23,6 +22,7 @@ const DecisiveThreshold = ({
 }) => {
   const handleChange = useCallback(
     (_, val) => {
+      localStorage.setItem('decisiveThreshold', val)
       onChange({ decisiveThreshold: val })
     },
     [onChange]

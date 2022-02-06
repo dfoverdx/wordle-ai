@@ -3,11 +3,20 @@ declare global {
     get dbg(): undefined;
   }
   
-  const dbg: undefined;
+  const dbg: number;
+  
+  const WORD_LEN: number;
+  const MAX_GUESSES: number;
+  const GREEN: string;
+  const YELLOW: string;
+  const GRAY: string;
+  const RUN_ALL: string;
+  const GO_BALLS_DEEP: string;
+  const SHUFFLE_DECISIVE: boolean;
   
   const l: Console['log'] & { 
     count: number;
-    get x(): undefined;
+    get x(): number;
   };
   
   function lj(
@@ -16,6 +25,7 @@ declare global {
   ): undefined;
   function lje(...vals: any[]): undefined;
   function ljs(...vals: any[]): undefined;
+  function ljn(...vals: any[]): undefined;
   
   interface Math {
     roundTo(num: number, places?: number): number;
@@ -29,6 +39,8 @@ declare global {
     shuffle(inPlace?: true): this;
     shuffle(inPlace: false): Array<T>;
     chooseRandom(): T;
+    
+    last: T | undefined;
   }
   
   interface PromiseConstructor {
