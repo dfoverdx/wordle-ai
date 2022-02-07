@@ -70,7 +70,7 @@ const App = () => {
         dictionaries,
         isPuzzleWord,
         onResult: setResults,
-        //...settings,
+        ...settings,
       })
     )
 

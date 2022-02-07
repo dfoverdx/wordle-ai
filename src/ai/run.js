@@ -18,14 +18,14 @@ const run = (
     decisiveThreshold = 2,
     isPuzzleWord = false,
     doShuffle = true,
-    anyFirstWord = false,
   } = options
   
-  const { l, lj, ljs, lje } = printMethods(print)
+  const { l, lj, ljs, lje, ljn } = printMethods(print)
   
   let {
     nextTry = null,
     processor = null,
+    anyFirstWord = false,
   } = options
   
   let hardMode = true
@@ -63,8 +63,12 @@ const run = (
       '-'.repeat(wordLen * 3 + 2) + ' | Failed ☠️'
     )
     
+    anyFirstWord = anyFirstWord && !i
+    
     const useDecisive =
-      !nextTry && !random && (i || !anyFirstWord)
+      !nextTry && 
+      !random && 
+      !anyFirstWord &&
       i < maxGuesses - 1 && (
         preferDecisive
           ? words.length > 1
@@ -72,18 +76,17 @@ const run = (
             words.length > maxGuesses - i
       )
       
-    if (anyFirstWord && !i) {
+    if (anyFirstWord) {
       processor.sortByWordRank(true)
       hardMode = dictionaries[0]
-        .includes(Processor.allWords[wordLen][0])
+        .includes(Processor.allWords5[0])
     }
     
     const word =
-      !!nextTry ? nextTry :
+      nextTry ? nextTry :
       useDecisive ? processor.getDecisiveWord(i) :
       random ? words.chooseRandom() :
-      !i && anyFirstWord ? 
-        Processor.allWords[wordLen][0] :
+      anyFirstWord ? Processor.allWords5[0] :
       words[0]
     
     nextTry = null

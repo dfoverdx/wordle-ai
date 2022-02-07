@@ -24,6 +24,15 @@ export default class Processor {
   }
   
   static allWords = []
+  static wordLen = WORD_LEN
+  
+  static get allWords5() {
+    return this.allWords[this.wordLen]
+  }
+  
+  static set allWords5(value) {
+    return this.allWords[this.wordLen] = value
+  }
   
   static init(
     [puzzleWords, allWords],
@@ -31,12 +40,13 @@ export default class Processor {
     wordLen = WORD_LEN,
     maxGuesses = MAX_GUESSES
   ) {
-    this.allWords[wordLen] = 
-      this.allWords[wordLen] || [...allWords]
+    this.wordLen = wordLen
+    this.allWords5 = 
+      this.allWords5 || [...allWords]
       
     const dict = isPuzzleWord
       ? puzzleWords
-      : this.allWords[wordLen]
+      : this.allWords5
 
     const p = new this(
       [...dict],
@@ -52,10 +62,12 @@ export default class Processor {
     return printMethods(this.print > 0).l
   }
   
-  sortByWordRank() {
-    this._sortLetterFrequency()
-    this._sortLetterPerPositionFrequency()
-    return this._sortUniqueLetters()
+  sortByWordRank(sortAll = false) {
+    this._sortLetterFrequency(sortAll)
+    this._sortLetterPerPositionFrequency(sortAll)
+    return this._sortUniqueLetters(
+      sortAll ? Processor.allWords5 : this.words
+    )
   }
   
   get unknown() {
@@ -158,7 +170,7 @@ export default class Processor {
     } = this
 
     const knownCounts = getLetterCounts(known)
-    const allWords = Processor.allWords[wordLen]
+    const allWords = Processor.allWords5
     
     if (turn >= maxGuesses - 1) {
       throw 'Cannot get remaining letters on last guess'
@@ -228,8 +240,9 @@ export default class Processor {
     return word
   }
   
-  _sortLetterFrequency() {
+  _sortLetterFrequency(sortAll = false) {
     const { words } = this
+    const allWords = Processor.allWords5
     const counts = {}
 
     words.forEach(w =>
@@ -245,15 +258,23 @@ export default class Processor {
         (a, c) => a + ranks[c],
         0
       )
-
-    return this.words = words
-      .map(w => [w, calcRank(w)])
-      .sort((a, b) => a[1] - b[1])
-      .map(x => x[0])
+      
+    const nextWords =
+      (sortAll ? allWords : words)
+        .map(w => [w, calcRank(w)])
+        .sort((a, b) => a[1] - b[1])
+        .map(x => x[0])
+      
+    if (sortAll) {
+      return Processor.allWords5 = nextWords
+    } else {
+      return this.words = nextWords
+    }
   }
   
-  _sortLetterPerPositionFrequency() {
+  _sortLetterPerPositionFrequency(sortAll = false) {
     const { words, wordLen } = this
+    const allWords = Processor.allWords5
     const counts = 
       newFilledArray(wordLen, () => ({}))
     
@@ -267,10 +288,17 @@ export default class Processor {
       0
     )
     
-    return this.words = words
-      .map(w => [w, calcRank(w)])
-      .sort((a, b) => a[1] - b[1])
-      .map(x => x[0])
+    const nextWords =
+      (sortAll ? allWords : words)
+        .map(w => [w, calcRank(w)])
+        .sort((a, b) => a[1] - b[1])
+        .map(x => x[0])
+      
+    if (sortAll) {
+      return Processor.allWords5 = nextWords
+    } else {
+      return this.words = nextWords
+    }
   }
   
   _sortUniqueLetters(words = this.words) {
