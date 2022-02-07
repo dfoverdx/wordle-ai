@@ -13,11 +13,12 @@ const run = (
     preferDecisive = false,
     maxGuesses = MAX_GUESSES,
     print = true,
-    dictionaries = [[], []],
+    dictionaries,
     onResult = () => {},
     decisiveThreshold = 2,
     isPuzzleWord = false,
     doShuffle = true,
+    anyFirstWord = false,
   } = options
   
   const { l, lj, ljs, lje } = printMethods(print)
@@ -54,11 +55,6 @@ const run = (
   let words = processor.words
   let padLength = 0
   
-  if (!words.includes(todaysWord)) {
-    l('Word not in dictionary 😵‍💫')
-    return {} // addAndRerun(todaysWord)
-  }
-
   let shuffled = false;
   l('Guesses:')
   
@@ -68,20 +64,27 @@ const run = (
     )
     
     const useDecisive =
-      !nextTry && !random &&
+      !nextTry && !random && (i || !anyFirstWord)
       i < maxGuesses - 1 && (
         preferDecisive
           ? words.length > 1
           : processor.unknown <= decisiveThreshold &&
             words.length > maxGuesses - i
       )
+      
+    if (anyFirstWord && !i) {
+      processor.sortByWordRank(true)
+      hardMode = dictionaries[0]
+        .includes(Processor.allWords[wordLen][0])
+    }
     
-    let word = nextTry ||
-      (useDecisive
-        ? processor.getDecisiveWord(i)
-        : random
-          ? words.chooseRandom()
-          : words[0])
+    const word =
+      !!nextTry ? nextTry :
+      useDecisive ? processor.getDecisiveWord(i) :
+      random ? words.chooseRandom() :
+      !i && anyFirstWord ? 
+        Processor.allWords[wordLen][0] :
+      words[0]
     
     nextTry = null
     
@@ -89,15 +92,14 @@ const run = (
       lucky = false
       luckyAt = Infinity
       shuffled = false
-      hardMode = false
+      hardMode = 
+        hardMode && dictionaries[0].includes(word)
     }
     
     if (!word) {
       throw new Error(
         'No word returned, likely from getDecisiveWord()'
       )
-      word = words.chooseRandom()
-      lucky = true
     }
 
     processor.guessed.add(word)
@@ -134,7 +136,6 @@ const run = (
     }
     
     words = processor.next(word, result)
-    
     guessResults.last.push(words.length)
     
     onResult({

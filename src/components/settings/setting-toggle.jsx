@@ -10,11 +10,15 @@ const SettingToggle = ({
   label,
   settings,
   onChange,
+  disabledWhen = () => false,
+  ...props
 }) =>
   <FormGroup>
     <FormControlLabel
       control={
         <Switch
+          disabled={disabledWhen(settings)}
+          {...props}
           checked={settings[setting]}
           onChange={() => 
             onChange({ [setting]: !settings[setting] })

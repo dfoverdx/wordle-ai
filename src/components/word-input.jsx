@@ -85,7 +85,7 @@ export const WordInput = ({
     valid && puzzleWords.includes(word)
 
   const handleChange = e => {
-    const val = e.target.value
+    const val = e.target.value.trim()
     setWord(val.slice(0, 5).toUpperCase())
   }
 

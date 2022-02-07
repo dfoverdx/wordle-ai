@@ -18,7 +18,7 @@ const Slider = styled(MUISlider)`
 
 const DecisiveThreshold = ({
   onChange,
-  settings: { decisiveThreshold },
+  settings: { decisiveThreshold, random },
 }) => {
   const handleChange = useCallback(
     (_, val) => {
@@ -45,6 +45,7 @@ const DecisiveThreshold = ({
           `${v} unknown letters`
         }
         onChange={handleChange}
+        disabled={random}
       />
     </FormGroup>
   )

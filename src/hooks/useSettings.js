@@ -7,6 +7,8 @@ const getInitialSettings = () => ({
   random: false,
   showWordsLeft: false,
   doShuffle: true,
+  anyFirstWord: false,
+  random: false,
   ...JSON.parse(
     localStorage.getItem('settings') || '{}'
   )

@@ -11,6 +11,9 @@ import DecisiveThreshold from './decisive-threshold.jsx'
 import ShowWordsLeftToggle 
   from './show-words-left-toggle.jsx'
 import ShuffleToggle from './shuffle-toggle.jsx'
+import AnyFirstWordToggle
+  from './any-first-word-toggle.jsx'
+import RandomToggle from './random-toggle.jsx'
 
 const Drawer = styled(MUIDrawer)`
   & .MuiDrawer-paper {
@@ -38,8 +41,10 @@ export const Settings = memo(
       >
         <HideTextToggle {...props} />
         <ShowWordsLeftToggle {...props} />
+        <RandomToggle {...props} />
         <DecisiveThreshold {...props} />
         <ShuffleToggle {...props} />
+        <AnyFirstWordToggle {...props} />
       </Drawer>
     </>
   },

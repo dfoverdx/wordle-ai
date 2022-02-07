@@ -70,9 +70,7 @@ const App = () => {
         dictionaries,
         isPuzzleWord,
         onResult: setResults,
-        random: settings.random,
-        decisiveThreshold: settings.decisiveThreshold,
-        doShuffle: settings.doShuffle,
+        //...settings,
       })
     )
 
