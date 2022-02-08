@@ -33,6 +33,6 @@ To install and run,
 4. In *Repository address*, type `git@github.com:dfoverdx/wordle-ai.git`
 5. I'm too lazy to determine the next steps
 6. You're smart; you'll figure it out
-  - Alternatively, you're not smart; you won't figure it out.  You may skip the next steps!  🥳
+   - Alternatively, you're not smart; you won't figure it out.  You may skip the next steps!  🥳
 7. Tap the ▶️ button
 8. Tap the 🌐 button
