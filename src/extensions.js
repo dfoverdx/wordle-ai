@@ -8,15 +8,17 @@ Math.randInt = (minOrMax, maxOrUndefined) => {
   return Math.floor(Math.random() * range) + min
 }
 
-Math.avg = vals =>
-  vals.reduce((a, v) => a + v, 0) / vals.length
-  
+Math.sum = (...vals) =>
+  vals.flat().reduce((s, v) => s + v, 0)
+Math.avg = (...vals) => Math.sum(...vals) / vals.length
+Math.product = (...vals) =>
+  vals.flat().reduce((p, v) => p * v, 1)
   
 const _max = Math.max;
 const _min = Math.min;
 
 Math.max = (...vals) =>
-  vals.reduce((m, v) => 
+  vals.flat().reduce((m, v) => 
     Number.isNaN(m)
       ? v
       : _max(m, v),
@@ -44,6 +46,10 @@ Array.prototype.shuffle = function (inPlace = true) {
 
 Array.prototype.chooseRandom = function () {
   return this[Math.randInt(this.length)]
+}
+
+Array.prototype.joinNL = function () {
+  return this.join('\n')
 }
 
 Object.defineProperty(
@@ -85,6 +91,10 @@ Object.entries(
         return Array.from(this)[n](...args)
       }
   )
+
+String.prototype.splitNL = function () {
+  return this.split(/\r?\n/)
+}
   
 Object.mapObject = (obj, fn) =>
   Object.fromEntries(Object.entries(obj).map(fn))

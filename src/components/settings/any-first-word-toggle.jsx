@@ -6,7 +6,7 @@ const AnyFirstWordToggle = props =>
     {...props}
     setting="anyFirstWord"
     label="Use any word first"
-    disabledWhen={s => s.random}
+    disabledWhen={s => s.random || s.forceHardMode}
   />
 
 export default AnyFirstWordToggle

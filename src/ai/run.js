@@ -18,6 +18,7 @@ const run = (
     decisiveThreshold = 2,
     isPuzzleWord = false,
     doShuffle = true,
+    forceHardMode = false,
   } = options
   
   const { l, lj, ljs, lje, ljn } = printMethods(print)
@@ -69,6 +70,7 @@ const run = (
       !nextTry && 
       !random && 
       !anyFirstWord &&
+      !forceHardMode &&
       i < maxGuesses - 1 && (
         preferDecisive
           ? words.length > 1

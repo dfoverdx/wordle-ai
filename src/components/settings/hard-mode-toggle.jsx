@@ -4,7 +4,7 @@ import SettingToggle from './setting-toggle.jsx'
 const HardModeToggle = props =>
   <SettingToggle
     {...props}
-    setting="hardMode"
+    setting="forceHardMode"
     label="Hard mode"
   />
 
