@@ -5,7 +5,8 @@ const HardModeToggle = props =>
   <SettingToggle
     {...props}
     setting="forceHardMode"
-    label="Hard mode"
+    label="Enforce hard mode"
+    disabledWhen={s => s.anyFirstWord}
   />
 
 export default HardModeToggle

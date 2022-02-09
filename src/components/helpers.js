@@ -8,6 +8,11 @@ export const CURRENT_PUZZLE_NUMBER =
 
 export const getPuzzleNumber = (puzzleWords, word) => {
   const puzzleWordIdx = puzzleWords.indexOf(word)
+  
+  if (puzzleWordIdx === -1) {
+    return null
+  }
+  
   const puzzleDay =
     WORDLE_DAY_0.clone().add(puzzleWordIdx, 'days')
   const pastPuzzle = moment().endOf('day') >= puzzleDay

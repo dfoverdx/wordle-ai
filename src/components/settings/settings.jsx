@@ -15,11 +15,22 @@ import AnyFirstWordToggle
   from './any-first-word-toggle.jsx'
 import RandomToggle from './random-toggle.jsx'
 import HardModeToggle from './hard-mode-toggle.jsx'
+import AutoplayToggle from './autoplay-toggle.jsx'
 
 const Drawer = styled(MUIDrawer)`
   & .MuiDrawer-paper {
     padding: .5rem 1rem;
   }
+`
+
+const H2 = styled.h2`
+  font-size: 1.3rem;
+  font-family: sans-serif;
+  margin: 6px 0 4px;
+`
+
+const H3 = styled(props => <H2 as="h3" {...props} />)`
+  font-size: 1.1rem;
 `
 
 export const Settings = memo(
@@ -40,13 +51,17 @@ export const Settings = memo(
         onClose={handleClose}
         anchor="right"
       >
+        <H2>Settings</H2>
+        <H3>Display</H3>
+        <AutoplayToggle {...props} />
         <HideTextToggle {...props} />
         <ShowWordsLeftToggle {...props} />
+        <H3>AI</H3>
         <HardModeToggle {...props} />
-        <RandomToggle {...props} />
-        <DecisiveThreshold {...props} />
-        <ShuffleToggle {...props} />
         <AnyFirstWordToggle {...props} />
+        <RandomToggle {...props} />
+        <ShuffleToggle {...props} />
+        <DecisiveThreshold {...props} />
       </Drawer>
     </>
   },

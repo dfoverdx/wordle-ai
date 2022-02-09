@@ -1,8 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-} from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from '@emotion/styled'
 import {
   Autocomplete,
@@ -44,21 +40,25 @@ const Input = styled(MUIInput, {
 
 const useAutocomplete = false;
 
-export const WordInput = ({
+const WordInput = ({
   onSubmit,
   dictionaries: [puzzleWords, allWords],
   settings,
   hasResult,
 }) => {
   const [word, setWord] = useState('')
-  const playedRef = useRef(false);
+  const playedRef = useRef(false)
 
   useEffect(() => {
-    if (puzzleWords.length && !playedRef.current) {
+    if (
+      puzzleWords.length && 
+      !playedRef.current &&
+      settings.autoplay
+    ) {
       playedRef.current = true
 
       const today = moment().endOf('day')
-      if (today.diff(lastPlay, 'days') === 1) {
+      if (today.diff(lastPlay, 'days') >= 1) {
         const word = puzzleWords[CURRENT_PUZZLE_NUMBER]
         setWord(word)
         setTimeout(() => {
@@ -73,7 +73,7 @@ export const WordInput = ({
         setWord(localStorage.getItem('word') || '')
       }
     }
-  }, [puzzleWords, onSubmit])
+  }, [puzzleWords, onSubmit, settings.autoplay])
 
   if (!allWords.length) {
     return null
@@ -105,9 +105,8 @@ export const WordInput = ({
     onSubmit({ word, isPuzzleWord })
   }
 
-  const input =
-    useAutocomplete
-      ? <Autocomplete
+  const input = useAutocomplete
+    ? <Autocomplete
         autoComplete
         autoHighlight
         options={
@@ -128,7 +127,7 @@ export const WordInput = ({
           />
         }
       />
-      : <Input
+    : <Input
         maxLength={5}
         isPuzzleWord={isPuzzleWord}
         onChange={handleChange}
@@ -138,17 +137,13 @@ export const WordInput = ({
       />
 
   return (
-    <Container
-      hasResult={hasResult}
-      {...settings}
-    >
+    <Container hasResult={hasResult} {...settings}>
       {input}
-      <Button
-        disabled={!valid}
-        onClick={handleSubmit}
-      >
+      <Button disabled={!valid} onClick={handleSubmit}>
         Go
       </Button>
     </Container>
   )
 }
+
+export default WordInput

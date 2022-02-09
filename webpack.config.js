@@ -50,15 +50,15 @@ module.exports = {
     ]
   },
   plugins: [
-    new DefinePlugin([
+    new DefinePlugin({
       ...Object.fromEntries(
         Object.entries(require('./constants'))
           .map(([k, v]) => [k, JSON.stringify(v)])
       ),
       RUNNING_ON_MOBILE: JSON.stringify(
         process.platform === 'ios'
-      )
-    ]),
+      ),
+    }),
     new HotModuleReplacementPlugin()
   ],
   output: {

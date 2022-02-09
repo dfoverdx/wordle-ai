@@ -2,11 +2,20 @@ import React, { useState, useCallback } from 'react'
 import { 
   FormGroup, 
   Typography, 
-  Slider as MUISlider,
+  Slider as MuiSlider,
+  IconButton,
+  Tooltip as MuiTooltip,
 } from '@mui/material'
+import InfoIcon from '@mui/icons-material/InfoOutlined'
 import styled from '@emotion/styled'
 
-const Slider = styled(MUISlider)`
+const Tooltip = styled(MuiTooltip)`
+  & .MuiTooltip-popper {
+    z-index: 99999;
+  }
+`
+
+const Slider = styled(MuiSlider)`
   width: 200px;
   
   & .MuiSlider-thumb {
@@ -50,5 +59,29 @@ const DecisiveThreshold = ({
     </FormGroup>
   )
 }
+
+const decisiveThresholdInfo = 
+  <div>
+    <p>
+      When there are more words remaining than there are guesses, and each word is equally likely, the AI will play a word that it knows it cannot be in order to determine which of the letters left unknown are the right ones.
+    </p>
+    <p>
+      The threshold determines at how many unknown letter to begin trying these determiner guesses.
+    </p>
+  </div>
+
+const InfoTooltip = () =>
+  <Tooltip 
+    title={decisiveThresholdInfo}
+    arrow
+    enterDelay={10}
+    enterTouchDelay={10}
+    placement="top-end"
+    onOpen={() => window.alert()}
+  >
+    <IconButton>
+      <InfoIcon />
+    </IconButton>
+  </Tooltip>
   
 export default DecisiveThreshold

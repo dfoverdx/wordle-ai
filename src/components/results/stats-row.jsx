@@ -8,8 +8,7 @@ const Row = styled.div`
   flex-direction: row;
   justify-content: space-evenly;
   align-content: center;
-  margin-top: 8px;
-  font-family: sans-serif;
+  margin-top: 16px;
 `
 
 const Cell = styled('div', {
@@ -21,12 +20,12 @@ const Cell = styled('div', {
   align-content: center;
   flex: 1;
   
-  & > :first-of-type {
+  & > :first-child {
     ${({ color }) => ({ color })};
     font-size: 30px;
   }
   
-  & > :last-of-type {
+  & > :last-child {
     font-size: 20px;
     text-align: center;
   }
@@ -37,10 +36,8 @@ const HardModeIcon = styled(({ hardMode, className }) =>
     ? <CheckIcon className={className} />
     : <ClearIcon className={className} />
 )`
-  color: ${
-    p => p.hardMode ? '#67CE66' : 'red'
-  };
   height: 36px;
+  width: 36px;
   display: block;
 `
 
@@ -49,6 +46,7 @@ export const StatsRow = ({
   lucky,
   wordsLeft,
   hardMode,
+  settings,
 }) =>
   !guessResults.length
     ? null
@@ -68,20 +66,35 @@ export const StatsRow = ({
             }
           </span>
         </Cell>
-        {guessResults.length <= MAX_GUESSES &&
-          <Cell>
-            <HardModeIcon hardMode={hardMode} />
-            <span>hard mode</span>
-          </Cell>
-        }
-        <Cell
-          color={lucky ? '#F1A33C' : '#3B81F6'}
-        >
-          <span>{lucky ? 'Yes' : 'No'}</span>
-          <span>luck needed</span>
-        </Cell>
+        <HardModeCell
+          hardMode={hardMode}
+          settings={settings}
+          guessResults={guessResults}
+        />
+        <LuckyCell {...{ lucky, settings }} />
         <Cell color="#3B81F6">
           <span>{wordsLeft}</span>
           <span>words left</span>
         </Cell>
       </Row>
+      
+const HardModeCell = ({
+  hardMode, 
+  guessResults, 
+  settings
+}) =>
+  guessResults.length <= MAX_GUESSES &&
+  !settings.anyFirstWord
+    ? <Cell color={hardMode ? '#67CE66' : 'red'}>
+        <HardModeIcon hardMode={hardMode} />
+        <span>hard mode</span>
+      </Cell>
+    : null
+
+const LuckyCell = ({ lucky, settings }) =>
+  !settings.random && !settings.forceHardMode
+    ? <Cell color={lucky ? '#F1A33C' : '#3B81F6'}>
+        <span>{lucky ? 'Yes' : 'No'}</span>
+        <span>luck needed</span>
+      </Cell>
+    : null
