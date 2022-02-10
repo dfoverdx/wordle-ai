@@ -20,6 +20,7 @@ import AutoplayToggle from './autoplay-toggle.jsx'
 const Drawer = styled(MUIDrawer)`
   & .MuiDrawer-paper {
     padding: .5rem 1rem;
+    overflow: visible;
   }
 `
 

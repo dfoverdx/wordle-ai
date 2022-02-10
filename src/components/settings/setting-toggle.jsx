@@ -11,6 +11,7 @@ const SettingToggle = ({
   settings,
   onChange,
   disabledWhen = () => false,
+  forceChecked = () => null,
   ...props
 }) =>
   <FormGroup>
@@ -19,7 +20,9 @@ const SettingToggle = ({
         <Switch
           disabled={disabledWhen(settings)}
           {...props}
-          checked={settings[setting]}
+          checked={
+            forceChecked(settings) ?? settings[setting]
+          }
           onChange={() => 
             onChange({ [setting]: !settings[setting] })
           }

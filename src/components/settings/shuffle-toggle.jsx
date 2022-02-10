@@ -7,6 +7,7 @@ const ShuffleToggle = props =>
     setting="doShuffle"
     label="Shuffle equally likely words"
     disabledWhen={s => s.random}
+    forceChecked={s => s.random ? true : null}
   />
   
 export default ShuffleToggle
