@@ -1,9 +1,14 @@
 import React from 'react'
 import { 
   FormGroup, 
-  FormControlLabel, 
+  FormControlLabel as MuiFormControlLabel, 
   Switch 
 } from '@mui/material'
+import styled from '@emotion/styled'
+
+const FormControlLabel = styled(MuiFormControlLabel)`
+  margin-right: 0;
+`
 
 const SettingToggle = ({
   setting,

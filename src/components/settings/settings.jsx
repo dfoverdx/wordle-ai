@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react'
+import React, { useState, memo, Fragment } from 'react'
 import { 
   IconButton, 
   Drawer as MUIDrawer
@@ -6,16 +6,7 @@ import {
 import SettingsIcon from '@mui/icons-material/Settings'
 import styled from '@emotion/styled'
 import _ from 'lodash'
-import HideTextToggle from './hide-text-toggle.jsx'
-import DecisiveThreshold from './decisive-threshold.jsx'
-import ShowWordsLeftToggle 
-  from './show-words-left-toggle.jsx'
-import ShuffleToggle from './shuffle-toggle.jsx'
-import AnyFirstWordToggle
-  from './any-first-word-toggle.jsx'
-import RandomToggle from './random-toggle.jsx'
-import HardModeToggle from './hard-mode-toggle.jsx'
-import AutoplayToggle from './autoplay-toggle.jsx'
+import inputs from './inputs'
 
 const Drawer = styled(MUIDrawer)`
   & .MuiDrawer-paper {
@@ -53,16 +44,13 @@ export const Settings = memo(
         anchor="right"
       >
         <H2>Settings</H2>
-        <H3>Display</H3>
-        <AutoplayToggle {...props} />
-        <HideTextToggle {...props} />
-        <ShowWordsLeftToggle {...props} />
-        <H3>AI</H3>
-        <HardModeToggle {...props} />
-        <AnyFirstWordToggle {...props} />
-        <RandomToggle {...props} />
-        <ShuffleToggle {...props} />
-        <DecisiveThreshold {...props} />
+        {inputs.map(([group, list]) => 
+          <Fragment key={group}>
+            <H3>{group}</H3>
+            {list.map(Input =>
+              <Input key={Input.name} {...props} />)}
+          </Fragment>
+        )}
       </Drawer>
     </>
   },

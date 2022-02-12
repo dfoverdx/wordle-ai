@@ -13,21 +13,31 @@ const run = (
     preferDecisive = false,
     maxGuesses = MAX_GUESSES,
     print = true,
-    dictionaries,
     onResult = () => {},
     decisiveThreshold = 2,
     isPuzzleWord = false,
     doShuffle = true,
     forceHardMode = false,
+    excludePrevious,
   } = options
   
   const { l, lj, ljs, lje, ljn } = printMethods(print)
   
   let {
+    dictionaries,
     nextTry = null,
     processor = null,
     anyFirstWord = false,
   } = options
+  
+  if (isPuzzleWord && excludePrevious) {
+    dictionaries = [
+      dictionaries[0].slice(
+        dictionaries[0].indexOf(todaysWord) - 1
+      ),
+      dictionaries[1],
+    ]
+  }
   
   let hardMode = true
 

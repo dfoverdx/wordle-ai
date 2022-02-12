@@ -15,7 +15,7 @@ const Results = props => {
   const hasResult = !!results.guessResults.length
   
   return <ResultContainer>
-    <Header {...props} />
+    <Header {...props} hasResult={hasResult} />
     {results.guessResults.map(
       ([guess, result, wordsLeft], i) =>
         <Fragment key={guess}>
@@ -43,6 +43,7 @@ const Header = styled(({
   }
   
   const puzzleNumber = getPuzzleNumber(puzzleWords, word)
+  l(puzzleWords.includes(word))
   
   return <h1 className={className}>
     {puzzleNumber != null
