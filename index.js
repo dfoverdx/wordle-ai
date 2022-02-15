@@ -5,6 +5,7 @@ const webpackMiddleware =
 const webpackHotMiddleware =
   require('webpack-hot-middleware')
 const path = require('path')
+const api = require('./api')
 
 const dataPath = path.resolve(__dirname, 'data')
 
@@ -19,10 +20,14 @@ const devMiddleware = webpackMiddleware(compiler, {
   watchOptions: {
     // Due to iOS devices memory constraints
     // disabling file watching is recommended 
-    //ignored: /.*/
-    ignored: /node_modules/
+    ignored: [
+      'dist/**',
+      'data/**',
+      /node_modules/,
+    ],
+    ignored: /.*/,
   },
-  //writeToDisk: true,
+  writeToDisk: true,
 })
 app.use(devMiddleware)
 

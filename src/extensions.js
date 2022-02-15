@@ -25,7 +25,7 @@ Math.max = (...vals) =>
     NaN)
     
 Math.min = (...vals) =>
-  vals.reduce((m, v) => 
+  vals.flat().reduce((m, v) => 
     Number.isNaN(m)
       ? v
       : _min(m, v),

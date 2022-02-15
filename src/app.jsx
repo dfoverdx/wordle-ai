@@ -63,7 +63,7 @@ const App = () => {
   }
 
   const hasResult = !!results.guessResults.length
-  const puzzleWords = dictionaries[1]
+  const puzzleWords = dictionaries[0]
 
   return <AppWrapper>
     <ButtonsContainer>
