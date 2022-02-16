@@ -1,5 +1,9 @@
 import _ from 'lodash';
-import { getLetterCounts, newFilledArray, printMethods } from '../helpers';
+import {
+  getLetterCounts,
+  newFilledArray,
+  printMethods
+} from './helpers';
 import run from './run';
 
 export default class Processor {

@@ -1,12 +1,15 @@
 const path = require('path');
 const {
-  DefinePlugin, 
+  DefinePlugin,
   HotModuleReplacementPlugin,
   NoEmitOnErrorsPlugin,
 } = require('webpack')
 
 const hotMiddlewareScript =
   'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true'
+
+const RUNNING_ON_MOBILE = global.RUNNING_ON_MOBILE =
+  process.platform === 'ios';
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
@@ -34,14 +37,6 @@ module.exports = {
         }
       },
       {
-        test: (m) => { return /\.css$/.test(m) },
-        exclude: (m) => { return /node_modules/.test(m) },
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
-      },
-      {
         test: (m) => { return /\.(png|jp(e*)g|svg)$/.test(m) },
         exclude: (m) => { return /node_modules/.test(m) },
         use: [{
@@ -61,7 +56,7 @@ module.exports = {
           .map(([k, v]) => [k, JSON.stringify(v)])
       ),
       RUNNING_ON_MOBILE: JSON.stringify(
-        process.platform === 'ios'
+        RUNNING_ON_MOBILE
       ),
     }),
     new HotModuleReplacementPlugin(),

@@ -1,4 +1,4 @@
-import { printMethods, tryWord } from '../helpers';
+import { printMethods, tryWord } from './helpers';
 import Processor from './processor';
 
 const run = (
