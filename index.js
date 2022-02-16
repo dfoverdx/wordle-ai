@@ -5,7 +5,7 @@ const webpackMiddleware =
 const webpackHotMiddleware =
   require('webpack-hot-middleware')
 const path = require('path')
-const api = require('./api')
+//const api = require('./api')
 
 const dataPath = path.resolve(__dirname, 'data')
 
@@ -31,7 +31,12 @@ const devMiddleware = webpackMiddleware(compiler, {
 })
 app.use(devMiddleware)
 
-const hotMiddleware = webpackHotMiddleware(compiler)
+const hotMiddleware = webpackHotMiddleware(compiler, {
+  log: console.log,
+  path: '/__webpack_hmr',
+  heartbeat: 10 * 1000,
+})
+
 app.use(hotMiddleware)
 
 app.use('/data', express.static(dataPath))

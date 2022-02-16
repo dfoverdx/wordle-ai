@@ -2,15 +2,19 @@ const path = require('path');
 const {
   DefinePlugin, 
   HotModuleReplacementPlugin,
+  NoEmitOnErrorsPlugin,
 } = require('webpack')
+
+const hotMiddlewareScript =
+  'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true'
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
   mode: 'development',
   entry: {
     app: [
-      // 'webpack-hot-middleware/client',
-      './src/app.jsx'
+      './src/app.jsx',
+      hotMiddlewareScript,
     ]
   },
   module: {
@@ -59,7 +63,8 @@ module.exports = {
         process.platform === 'ios'
       ),
     }),
-    new HotModuleReplacementPlugin()
+    new HotModuleReplacementPlugin(),
+    new NoEmitOnErrorsPlugin(),
   ],
   output: {
     filename: '[name].bundle.js',

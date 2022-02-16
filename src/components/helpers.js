@@ -22,6 +22,6 @@ module.exports = {
   },
   get CURRENT_PUZZLE_NUMBER() {
     return moment().diff(WORDLE_DAY_0, 'days')
-  }
+  },
   getPuzzleNumber,
 }
