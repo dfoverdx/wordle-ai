@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { FailedRow } from './failed-row.jsx';
 import { ResultRow } from './result-row.jsx';
 import { StatsRow } from './stats-row.jsx';
-import { getPuzzleNumber } from '.../helpers';
+import { getPuzzleNumber } from '../../helpers';
 
 const ResultContainer = styled('div')`
   display: flex;

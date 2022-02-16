@@ -25,7 +25,7 @@ const devMiddleware = webpackMiddleware(compiler, {
       'data/**',
       /node_modules/,
     ],
-    ignored: /.*/,
+    //ignored: /.*/,
   },
   writeToDisk: true,
 })

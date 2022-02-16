@@ -17,6 +17,7 @@ module.exports = {
       hotMiddlewareScript,
     ]
   },
+  devtool: 'eval-cheap-source-map',
   module: {
     rules: [
       {
