@@ -1,12 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
-import styled from '@emotion/styled'
-import {
-  Autocomplete,
-  Button,
-  Input as MUIInput,
-} from '@mui/material'
-import { CURRENT_PUZZLE_NUMBER } from './helpers'
-import moment from 'moment'
+import React, { useEffect, useRef, useState } from 'react';
+import styled from '@emotion/styled';
+import { Autocomplete, Button, Input as MUIInput } from '@mui/material';
+import moment from 'moment';
+import { CURRENT_PUZZLE_NUMBER } from '../helpers';
 
 const lastPlay = moment(
   Number(localStorage.getItem('lastPlay')) || 0
@@ -34,7 +30,7 @@ const Input = styled(MUIInput, {
   font-family: 'menlo-regular', consolas, monospace;
   font-size: 30px;
   width: 100px;
-  
+
   ${p => p.isPuzzleWord && { fontWeight: 800 }}
 `
 
@@ -51,7 +47,7 @@ const WordInput = ({
 
   useEffect(() => {
     if (
-      puzzleWords.length && 
+      puzzleWords.length &&
       !playedRef.current &&
       settings.autoplay
     ) {
@@ -66,7 +62,7 @@ const WordInput = ({
           localStorage.setItem('lastPlay', Date.now())
           onSubmit({
             word,
-            isPuzzleWord: puzzleWords.includes(word) 
+            isPuzzleWord: puzzleWords.includes(word)
           })
         })
       } else {

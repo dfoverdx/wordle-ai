@@ -1,9 +1,9 @@
-import React, { Fragment } from 'react'
-import styled from '@emotion/styled'
-import { getPuzzleNumber } from '../helpers'
-import { FailedRow } from './failed-row.jsx'
-import { ResultRow } from './result-row.jsx'
-import { StatsRow } from './stats-row.jsx'
+import React, { Fragment } from 'react';
+import styled from '@emotion/styled';
+import { FailedRow } from './failed-row.jsx';
+import { ResultRow } from './result-row.jsx';
+import { StatsRow } from './stats-row.jsx';
+import { getPuzzleNumber } from '.../helpers';
 
 const ResultContainer = styled('div')`
   display: flex;
@@ -13,7 +13,7 @@ const ResultContainer = styled('div')`
 const Results = props => {
   const { results, puzzleWords, word, settings } = props
   const hasResult = !!results.guessResults.length
-  
+
   return <ResultContainer>
     <Header {...props} hasResult={hasResult} />
     {results.guessResults.map(
@@ -35,16 +35,16 @@ const Results = props => {
 const Header = styled(({
   word,
   puzzleWords,
-  hasResult, 
+  hasResult,
   className,
 }) => {
   if (!hasResult) {
     return null
   }
-  
+
   const puzzleNumber = getPuzzleNumber(puzzleWords, word)
   l(puzzleWords.includes(word))
-  
+
   return <h1 className={className}>
     {puzzleNumber != null
       ? <>

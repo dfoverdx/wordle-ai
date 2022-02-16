@@ -6,7 +6,7 @@ const { Router } = require('express')
 global.WORDLE_DAY_0_TIME =
   require('./constants').WORDLE_DAY_0_TIME
 
-const h = require('./src/components/helpers')
+const h = require('./src/helpers')
 
 const dataPath = path.resolve(__dirname, 'data')
 const puzzleWordsPath =
@@ -21,7 +21,7 @@ const router = module.exports = new Router()
       .splitNL()
       .
     fs.appendFileSync(
-      puzzleWordsPath, 
+      puzzleWordsPath,
       '\n' + req.params.word
     )
   })

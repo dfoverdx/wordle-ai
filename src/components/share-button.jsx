@@ -1,7 +1,7 @@
-import React from 'react'
-import { IconButton } from '@mui/material'
-import ShareIcon from '@mui/icons-material/Share'
-import { CURRENT_PUZZLE_NUMBER } from './helpers'
+import React from 'react';
+import ShareIcon from '@mui/icons-material/Share';
+import { IconButton } from '@mui/material';
+import { CURRENT_PUZZLE_NUMBER } from '../helpers';
 
 const ShareButton = ({ results: { guessResults: r, } }) =>
   r.length && navigator.canShare(getData(r))

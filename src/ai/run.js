@@ -1,8 +1,5 @@
-import Processor from './processor'
-import { 
-  tryWord,
-  printMethods,
-} from './helpers'
+import { printMethods, tryWord } from '../helpers';
+import Processor from './processor';
 
 const run = (
   todaysWord,
@@ -20,16 +17,16 @@ const run = (
     forceHardMode = false,
     excludePrevious,
   } = options
-  
+
   const { l, lj, ljs, lje, ljn } = printMethods(print)
-  
+
   let {
     dictionaries,
     nextTry = null,
     processor = null,
     anyFirstWord = false,
   } = options
-  
+
   if (isPuzzleWord && excludePrevious) {
     dictionaries = [
       dictionaries[0].slice(
@@ -38,47 +35,47 @@ const run = (
       dictionaries[1],
     ]
   }
-  
+
   let hardMode = true
 
   const wordLen = todaysWord.length
-  
+
   l.count = 0
   todaysWord = todaysWord.toUpperCase()
 
   const tw = tryWord.bind(null, todaysWord)
-  
+
   const SUCCESS = GREEN.repeat(wordLen)
   const guessResults = []
-  
+
   let lucky = false
   let luckyAt = Infinity
-  
+
   l('Word: ' + todaysWord)
-  
+
   processor = processor || Processor.init(
     dictionaries,
     isPuzzleWord,
     wordLen,
     maxGuesses
   )
-  
+
   let words = processor.words
   let padLength = 0
-  
+
   let shuffled = false;
   l('Guesses:')
-  
+
   for (let i = 0; ; i++) {
     i === maxGuesses && l(
       '-'.repeat(wordLen * 3 + 2) + ' | Failed ☠️'
     )
-    
+
     anyFirstWord = anyFirstWord && !i
-    
+
     const useDecisive =
-      !nextTry && 
-      !random && 
+      !nextTry &&
+      !random &&
       !anyFirstWord &&
       !forceHardMode &&
       i < maxGuesses - 1 && (
@@ -87,30 +84,30 @@ const run = (
           : processor.unknown <= decisiveThreshold &&
             words.length > maxGuesses - i
       )
-      
+
     if (anyFirstWord) {
       processor.sortByWordRank(true)
       hardMode = dictionaries[0]
         .includes(Processor.allWords5[0])
     }
-    
+
     const word =
       nextTry ? nextTry :
       useDecisive ? processor.getDecisiveWord(i) :
       random ? words.chooseRandom() :
       anyFirstWord ? Processor.allWords5[0] :
       words[0]
-    
+
     nextTry = null
-    
+
     if (useDecisive) {
       lucky = false
       luckyAt = Infinity
       shuffled = false
-      hardMode = 
+      hardMode =
         hardMode && dictionaries[0].includes(word)
     }
-    
+
     if (!word) {
       throw new Error(
         'No word returned, likely from getDecisiveWord()'
@@ -118,17 +115,17 @@ const run = (
     }
 
     processor.guessed.add(word)
-    
+
     const result = tw(word);
     guessResults.push([ word, result ])
-    
+
     if (result.join('') === SUCCESS) {
       ljs(
         word,
         SUCCESS,
         '|',
         i < maxGuesses
-          ? 'Success!' 
+          ? 'Success!'
           : 'Done',
         lucky
           ? i < maxGuesses
@@ -136,11 +133,11 @@ const run = (
             : 'unlucky'
           : ''
       )
-      
+
       if (words.length < 21) {
         l(words)
       }
-      
+
       return {
         guessResults,
         lucky,
@@ -149,19 +146,19 @@ const run = (
         hardMode,
       }
     }
-    
+
     words = processor.next(word, result)
     guessResults.last.push(words.length)
-    
+
     onResult({
       guessResults,
       lucky,
       wordsLeft: words.length,
       hardMode,
     })
-    
+
     !i && (padLength = words.length.toString().length)
-    
+
     ljs(
       word,
       result.join(''),
@@ -170,12 +167,12 @@ const run = (
       words.length === 1 ? 'word' : 'words',
       'left'
     )
-    
+
     if (!words.includes(todaysWord)) {
       l('Removed today\'s word 😵')
       throw new Error('Removed today\'s word 😵')
     }
-    
+
     if (!words.length) {
       l('No words? 🤨')
       throw new Error('No words? 🤨')
@@ -187,7 +184,7 @@ const run = (
         lucky = true
         luckyAt = Math.min(luckyAt, i + 1)
       }
-      
+
       doShuffle && words.shuffle()
     } else if (!shuffled) {
       words = processor.sortByWordRank()
@@ -200,7 +197,7 @@ export default run;
 export const runAll = dictionaries => {
   const words = dictionaries[0]
     //.slice(Math.floor(.55 * dictionaries[0].length))
-    
+
   const fivePercent = words.length / 20
   let next = fivePercent
   let comp = 0
@@ -211,10 +208,10 @@ export const runAll = dictionaries => {
           next += fivePercent
           comp += 5
         }
-        
+
         l(`${comp}%`)
       }
-      
+
       return [
         w,
         run(w, {
@@ -225,10 +222,10 @@ export const runAll = dictionaries => {
         })
       ]
     })
-    
+
   const nums = runs.map(([w, r]) => {
     const num = r.guessResults.length
-    
+
     if (r.lucky) {
       l(`${w} ${num}/6`)
       let luckWords = num - r.luckyAt + r.wordsLeft
@@ -240,15 +237,15 @@ export const runAll = dictionaries => {
       l(`${w} ${num}/6`)
       l('Deterministic failure')
     }
-    
+
     return num
   })
-  
+
   const luckOrFail =
-    runs.filter(([, r], i) => 
+    runs.filter(([, r], i) =>
       r.lucky || nums[i] > 6
     ).length
-  
+
   l('')
   l(`Failed: ${nums.filter(n => n > 6).length}`)
   l(`Lucky or failed: ${luckOrFail}`)
