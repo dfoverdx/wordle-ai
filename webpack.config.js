@@ -4,12 +4,10 @@ const {
   HotModuleReplacementPlugin,
   NoEmitOnErrorsPlugin,
 } = require('webpack')
+const { RUNNING_ON_DESKTOP } = require('./constants')
 
-const hotMiddlewareScript =
+const hotMiddlewareScript = RUNNING_ON_DESKTOP &&
   'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true'
-
-const RUNNING_ON_MOBILE = global.RUNNING_ON_MOBILE =
-  process.platform === 'ios';
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
@@ -18,34 +16,17 @@ module.exports = {
     app: [
       './src/app.jsx',
       hotMiddlewareScript,
-    ]
+    ].filter(x => x),
   },
-  devtool: 'eval-cheap-source-map',
+  devtool: RUNNING_ON_DESKTOP && 'eval-cheap-source-map',
   module: {
     rules: [
       {
-        test: (m) => { return /\.(js|jsx)$/.test(m) },
-        exclude: (m) => { return /node_modules/.test(m) },
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          options: {
-            /*presets: [
-              '@babel/preset-env',
-              '@babel/preset-react'
-            ]*/
-          }
         }
-      },
-      {
-        test: (m) => { return /\.(png|jp(e*)g|svg)$/.test(m) },
-        exclude: (m) => { return /node_modules/.test(m) },
-        use: [{
-          loader: 'url-loader',
-          options: {
-            limit: 8000,
-            name: 'images/[hash]-[name].[ext]'
-          }
-        }]
       }
     ]
   },
@@ -55,13 +36,11 @@ module.exports = {
         Object.entries(require('./constants'))
           .map(([k, v]) => [k, JSON.stringify(v)])
       ),
-      RUNNING_ON_MOBILE: JSON.stringify(
-        RUNNING_ON_MOBILE
-      ),
     }),
-    new HotModuleReplacementPlugin(),
+    RUNNING_ON_DESKTOP && 
+      new HotModuleReplacementPlugin(),
     new NoEmitOnErrorsPlugin(),
-  ],
+  ].filter(x => x),
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, './dist'),
@@ -78,5 +57,4 @@ module.exports = {
       }
     }
   },
-  //devtool: false,
 };

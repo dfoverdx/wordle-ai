@@ -5,6 +5,9 @@ const webpackMiddleware =
 const webpackHotMiddleware =
   require('webpack-hot-middleware')
 const path = require('path')
+const { RUNNING_ON_DESKTOP } = require('./constants')
+
+// not necessary yet!  huzzah!  🥳
 //const api = require('./api')
 
 const dataPath = path.resolve(__dirname, 'data')
@@ -31,13 +34,15 @@ const devMiddleware = webpackMiddleware(compiler, {
 })
 app.use(devMiddleware)
 
-const hotMiddleware = webpackHotMiddleware(compiler, {
-  log: console.log,
-  path: '/__webpack_hmr',
-  heartbeat: 10 * 1000,
-})
-
-app.use(hotMiddleware)
+if (RUNNING_ON_DESKTOP) {
+  const hotMiddleware = webpackHotMiddleware(compiler, {
+    log: console.log,
+    path: '/__webpack_hmr',
+    heartbeat: 10 * 1000,
+  })
+  
+  app.use(hotMiddleware)
+}
 
 app.use('/data', express.static(dataPath))
 app.get('/', (req, res) => {
@@ -54,7 +59,8 @@ app.listen(port, () => {
 // Register app and middleware. Required for better
 // performance when running from play.js
 try {
-  typeof pjs === 'object' && pjs.register(app, devMiddleware)
+  typeof pjs === 'object' && 
+    pjs.register(app, devMiddleware)
 } catch (error) {
   console.error(error)
 }
