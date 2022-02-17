@@ -92,7 +92,7 @@ const HardModeCell = ({
     : null
 
 const LuckyCell = ({ lucky, settings }) =>
-  !settings.random && !settings.forceHardMode
+  !settings.random
     ? <Cell color={lucky ? '#F1A33C' : '#3B81F6'}>
         <span>{lucky ? 'Yes' : 'No'}</span>
         <span>luck needed</span>
