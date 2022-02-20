@@ -2,7 +2,7 @@ import './extensions'
 import React, {
   Fragment,
   useEffect,
-  useState
+  useState,
 } from 'react'
 import ReactDOM from 'react-dom'
 import styled from '@emotion/styled'
@@ -11,7 +11,7 @@ import ErrorBoundary
   from './components/error-boundary.jsx'
 import Settings from './components/settings'
 import ShareButton from './components/share-button.jsx'
-import WordInput from './components/word-input.jsx'
+import WordInput from './components/word-input'
 import Results from './components/results'
 import useDictionary from './hooks/useDictionary'
 import useSettings from './hooks/useSettings'

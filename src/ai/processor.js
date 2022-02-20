@@ -40,8 +40,7 @@ export default class Processor {
     maxGuesses = MAX_GUESSES
   ) {
     this.wordLen = wordLen
-    this.allWords5 =
-      this.allWords5 || [...allWords]
+    this.allWords5 = this.allWords5 || [...allWords]
 
     const dict = isPuzzleWord
       ? puzzleWords

@@ -1,16 +1,18 @@
 import React, { 
   useEffect, 
   useRef, 
-  useState 
+  useState,
+  useCallback,
 } from 'react';
 import styled from '@emotion/styled';
 import { 
   Autocomplete, 
-  Button, 
-  Input as MUIInput 
+  Input as MUIInput
 } from '@mui/material';
 import moment from 'moment';
-import { CURRENT_PUZZLE_NUMBER } from '../helpers';
+import useCurrentPuzzleWord
+  from '../../hooks/useCurrentPuzzleWord';
+import Button from './button.jsx'
 
 const lastPlay = moment(
   Number(localStorage.getItem('lastPlay')) || 0
@@ -25,7 +27,6 @@ const Container = styled.div`
   };
   align-items: center;
   flex-direction: column;
-  flex-wrap: nowrap;
 `
 
 const platform =
@@ -52,6 +53,31 @@ const WordInput = ({
 }) => {
   const [word, setWord] = useState('')
   const playedRef = useRef(false)
+  const inputRef = useRef()
+  const currentPuzzle = useCurrentPuzzleWord(puzzleWords)
+  
+  const runCurrent = () => {
+    if (!currentPuzzle) {
+      return
+    }
+    
+    playedRef.current = true
+    
+    setWord(currentPuzzle)
+    setTimeout(() => {
+      localStorage.setItem('word', currentPuzzle)
+      localStorage.setItem('lastPlay', Date.now())
+      onSubmit({
+        word: currentPuzzle,
+        isPuzzleWord: true,
+      })
+    })
+  }
+  
+  useEffect(
+    () => { playedRef.current = false }, 
+    [currentPuzzle]
+  )
 
   useEffect(() => {
     if (
@@ -63,21 +89,12 @@ const WordInput = ({
 
       const today = moment().endOf('day')
       if (today.diff(lastPlay, 'days') >= 1) {
-        const word = puzzleWords[CURRENT_PUZZLE_NUMBER]
-        setWord(word)
-        setTimeout(() => {
-          localStorage.setItem('word', word)
-          localStorage.setItem('lastPlay', Date.now())
-          onSubmit({
-            word,
-            isPuzzleWord: puzzleWords.includes(word)
-          })
-        })
+        runCurrent()
       } else {
         setWord(localStorage.getItem('word') || '')
       }
     }
-  }, [puzzleWords, onSubmit, settings.autoplay])
+  })
 
   if (!allWords.length) {
     return null
@@ -108,6 +125,11 @@ const WordInput = ({
     localStorage.setItem('lastPlay', Date.now())
     onSubmit({ word, isPuzzleWord })
   }
+  
+  const handleClear = () => {
+    setWord('')
+    inputRef.current?.focus()
+  }
 
   const input = useAutocomplete
     ? <Autocomplete
@@ -132,6 +154,7 @@ const WordInput = ({
         }
       />
     : <Input
+        ref={inputRef}
         maxLength={5}
         isPuzzleWord={isPuzzleWord}
         onChange={handleChange}
@@ -139,13 +162,17 @@ const WordInput = ({
         value={word}
         onKeyDown={handleKeyDown}
       />
-
+  
   return (
     <Container hasResult={hasResult} {...settings}>
       {input}
-      <Button disabled={!valid} onClick={handleSubmit}>
-        Go
-      </Button>
+      <Button
+        word={word}
+        onClear={() => setWord('')}
+        onSetToCurrent={runCurrent}
+        valid={valid}
+        onSubmit={handleSubmit}
+      />
     </Container>
   )
 }

@@ -19,16 +19,12 @@ const _min = Math.min;
 
 Math.max = (...vals) =>
   vals.flat().reduce((m, v) => 
-    Number.isNaN(m)
-      ? v
-      : _max(m, v),
+    Number.isNaN(m) ? v : _max(m, v),
     NaN)
     
 Math.min = (...vals) =>
   vals.flat().reduce((m, v) => 
-    Number.isNaN(m)
-      ? v
-      : _min(m, v),
+    Number.isNaN(m) ? v : _min(m, v),
     NaN)
 
 Array.prototype.eachAnd = function (cb) {
@@ -99,7 +95,7 @@ String.prototype.splitNL = function () {
 Object.mapObject = (obj, fn) =>
   Object.fromEntries(Object.entries(obj).map(fn))
   
-global.l = (val = '', ...vals) => 
+global.l = (val = '', ...vals) =>
   console.log(val, ...vals)
 
 l.count = 0

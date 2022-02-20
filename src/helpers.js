@@ -16,12 +16,13 @@ const getPuzzleNumber = (puzzleWords, word) => {
   return pastPuzzle && puzzleWordIdx
 }
 
+const getCurrentPuzzleNumber = () =>
+  moment().endOf('day').diff(_WORDLE_DAY_0, 'days')
+
 module.exports = {
   get WORDLE_DAY_0() {
     return _WORDLE_DAY_0.clone()
   },
-  get CURRENT_PUZZLE_NUMBER() {
-    return moment().diff(_WORDLE_DAY_0, 'days')
-  },
+  getCurrentPuzzleNumber,
   getPuzzleNumber,
 }

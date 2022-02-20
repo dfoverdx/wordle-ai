@@ -40,7 +40,6 @@ const run = (
 
   const wordLen = todaysWord.length
 
-  l.count = 0
   todaysWord = todaysWord.toUpperCase()
 
   const tw = tryWord.bind(null, todaysWord)
@@ -104,8 +103,7 @@ const run = (
       lucky = false
       luckyAt = Infinity
       shuffled = false
-      hardMode =
-        hardMode && dictionaries[0].includes(word)
+      hardMode = hardMode && words.includes(word)
     }
 
     if (!word) {

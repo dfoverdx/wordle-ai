@@ -30,6 +30,9 @@ module.exports = {
       }
     ]
   },
+  // resolve: {
+  //   extensions: ['.jsx', '...'],
+  // },
   plugins: [
     new DefinePlugin({
       ...Object.fromEntries(
