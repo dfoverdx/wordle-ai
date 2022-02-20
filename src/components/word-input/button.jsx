@@ -14,14 +14,14 @@ const Button = ({
   onSetToCurrent,
   onClear,
 }) =>
-  !word
-    ? <StyledButton onClick={onSetToCurrent}>
-        Today's word
-      </StyledButton>
-    : !valid
-      ? <StyledButton onClick={onClear}>
-          Clear
-        </StyledButton>
-      : <StyledButton onClick={onSubmit}>Go</StyledButton>
+  !word ?
+    <StyledButton onClick={onSetToCurrent}>
+      Today's word
+    </StyledButton> :
+  !valid ?
+    <StyledButton onClick={onClear}>
+      Clear
+    </StyledButton> : 
+  <StyledButton onClick={onSubmit}>Go</StyledButton>
 
 export default Button
