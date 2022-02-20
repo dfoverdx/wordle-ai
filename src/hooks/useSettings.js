@@ -12,6 +12,8 @@ const getInitialSettings = () => ({
   forceHardMode: false,
   autoplay: false,
   excludePrevious: false,
+  wholeDictionary: false,
+  tryToLose: false,
   ...JSON.parse(
     localStorage.getItem('settings') || '{}'
   )

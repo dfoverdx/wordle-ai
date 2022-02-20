@@ -6,9 +6,14 @@ const AnyFirstWordToggle = props =>
     {...props}
     setting="anyFirstWord"
     label="Use any word first"
-    disabledWhen={s => s.random || s.forceHardMode}
+    disabledWhen={s => 
+      s.random || s.forceHardMode || s.wholeDictionary
+    }
     forceChecked={
-      s => s.random || s.forceHardMode ? false : null
+      s =>
+        s.random || s.forceHardMode ? false :
+        s.wholeDictionary ? true :
+        null
     }
   />
 

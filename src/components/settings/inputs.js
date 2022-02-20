@@ -8,6 +8,9 @@ import HideText from './hide-text-toggle.jsx'
 import Autoplay from './autoplay-toggle.jsx'
 import ShowWordsLeft from './show-words-left-toggle.jsx'
 import Shuffle from './shuffle-toggle.jsx'
+import WholeDictionary
+  from './whole-dictionary-toggle.jsx'
+import TryToLose from './try-to-lose-toggle.jsx'
 
 export default [
   [
@@ -22,11 +25,13 @@ export default [
     'AI',
     [
       HardMode,
+      WholeDictionary,
       ExcludePrevious,
       Shuffle,
       Random,
       DecisiveThreshold,
       AnyFirstWord,
+      TryToLose,
     ]
   ]
 ]

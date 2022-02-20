@@ -16,6 +16,7 @@ const RandomToggle = props => {
       {...props}
       setting="random"
       label="Use random words"
+      disabledWhen={s => s.tryToLose && s.forceHardMode}
     />
     <IconTooltip>
       <p>

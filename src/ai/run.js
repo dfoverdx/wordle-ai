@@ -16,6 +16,8 @@ const run = (
     doShuffle = true,
     forceHardMode = false,
     excludePrevious,
+    wholeDictionary = false,
+    tryToLose = false,
   } = options
 
   const { l, lj, ljs, lje, ljn } = printMethods(print)
@@ -27,7 +29,9 @@ const run = (
     anyFirstWord = false,
   } = options
 
-  if (isPuzzleWord && excludePrevious) {
+  if (wholeDictionary) {
+    dictionaries[0] = dictionaries[1].slice()
+  } else if (isPuzzleWord && excludePrevious) {
     dictionaries = [
       dictionaries[0].slice(
         dictionaries[0].indexOf(todaysWord) - 1
@@ -77,6 +81,7 @@ const run = (
       !random &&
       !anyFirstWord &&
       !forceHardMode &&
+      !tryToLose &&
       i < maxGuesses - 1 && (
         preferDecisive
           ? words.length > 1
@@ -95,6 +100,7 @@ const run = (
       useDecisive ? processor.getDecisiveWord(i) :
       random ? words.chooseRandom() :
       anyFirstWord ? Processor.allWords5[0] :
+      tryToLose ? words.last :
       words[0]
 
     nextTry = null

@@ -13,6 +13,7 @@ const ExcludePreviousToggle = props => {
       {...props}
       setting="excludePrevious"
       label="Exclude previous puzzle words"
+      disabledWhen={s => s.wholeDictionary}
     />
     <IconTooltip>
       <p>
@@ -21,5 +22,5 @@ const ExcludePreviousToggle = props => {
     </IconTooltip>
   </Container>
 }
-  
+
 export default ExcludePreviousToggle

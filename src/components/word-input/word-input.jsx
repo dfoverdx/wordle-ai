@@ -21,9 +21,7 @@ const lastPlay = moment(
 const Container = styled.div`
   width: 100%;
   display: ${p =>
-    p.hasResult && p.hideText
-      ? 'none'
-      : 'flex'
+    p.hasResult && p.hideText ? 'none' : 'flex'
   };
   align-items: center;
   flex-direction: column;
@@ -128,7 +126,8 @@ const WordInput = ({
   
   const handleClear = () => {
     setWord('')
-    inputRef.current?.focus()
+    setTimeout(() => 
+      inputRef.current.querySelector('input').focus())
   }
 
   const input = useAutocomplete
@@ -168,7 +167,7 @@ const WordInput = ({
       {input}
       <Button
         word={word}
-        onClear={() => setWord('')}
+        onClear={handleClear}
         onSetToCurrent={runCurrent}
         valid={valid}
         onSubmit={handleSubmit}

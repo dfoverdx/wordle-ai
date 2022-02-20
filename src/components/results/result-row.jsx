@@ -1,5 +1,11 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import { css } from '@emotion/react'
+
+const hiddenText = css`
+  color: transparent;
+  user-select: none;
+`
 
 const WordsLeftContainer = styled('div')`
   display: ${p =>
@@ -17,9 +23,9 @@ const ResultRowContainer = styled('div')`
   justify-content: center;
   font-size: 40px;
   font-family: 'menlo-regular', consolas, monospace;
-  color: ${p =>
-    p.hideText ? 'transparent' : 'white'
-  };
+  color: white;
+  
+  ${p => p.hideText && hiddenText}
 `
 
 export const ResultRow = ({

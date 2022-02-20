@@ -19,9 +19,7 @@ const Button = ({
       Today's word
     </StyledButton> :
   !valid ?
-    <StyledButton onClick={onClear}>
-      Clear
-    </StyledButton> : 
+    <StyledButton onClick={onClear}>Clear</StyledButton> : 
   <StyledButton onClick={onSubmit}>Go</StyledButton>
 
 export default Button
