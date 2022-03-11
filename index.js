@@ -16,14 +16,14 @@ const dataPath = path.resolve(__dirname, 'data')
 // Setup
 const app = express();
 const port = process.env['REACT_APP_PORT'] || 3001
-const config = require('./webpack.config.js')
+const config = require('./webpack.config.js')({}, {})
 const compiler = webpack(config);
 const devMiddleware = webpackMiddleware(compiler, {
   publicPath: config.output.publicPath,
   serverSideRender: false,
   watchOptions: {
     // Due to iOS devices memory constraints
-    // disabling file watching is recommended 
+    // disabling file watching is recommended
     ignored: [
       'dist/**',
       'data/**',
@@ -41,7 +41,7 @@ if (RUNNING_ON_DESKTOP) {
     path: '/__webpack_hmr',
     heartbeat: 10 * 1000,
   })
-  
+
   app.use(hotMiddleware)
 }
 
@@ -60,7 +60,7 @@ app.listen(port, () => {
 // Register app and middleware. Required for better
 // performance when running from play.js
 try {
-  typeof pjs === 'object' && 
+  typeof pjs === 'object' &&
     pjs.register(app, devMiddleware)
 } catch (error) {
   console.error(error)

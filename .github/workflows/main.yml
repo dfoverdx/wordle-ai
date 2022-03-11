@@ -1,0 +1,34 @@
+name: Build and Publish
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.8.x
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: Build
+        if: success()
+        run: npm run build
+
+      - name: Deploy
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v2.1.2
+        with:
+          build_dir: dist
+          fqdn: dfdx.us
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

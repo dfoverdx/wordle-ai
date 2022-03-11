@@ -1,13 +1,16 @@
 {
   "presets": [
-    ["@babel/preset-env", {
-      "loose": true,
-      "modules": "cjs",
-      "targets": {
-        "chrome": "70",
-      },
-    }],
-	"@babel/preset-react"
+    [
+      "@babel/preset-env",
+      {
+        "loose": true,
+        "modules": "cjs",
+        "targets": {
+          "chrome": "70"
+        }
+      }
+    ],
+    "@babel/preset-react"
   ],
   "plugins": [
     "@emotion/babel-plugin"
