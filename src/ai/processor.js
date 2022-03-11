@@ -306,8 +306,7 @@ export default class Processor {
       )
     )
 
-    const uniqueCompValue =
-      w => unique.has(w) ? -1 : 1
+    const uniqueCompValue = w => - unique.has(w)
 
     return words.sort((a, b) =>
       uniqueCompValue(a) - uniqueCompValue(b)

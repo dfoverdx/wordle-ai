@@ -3,6 +3,7 @@ import React, {
   Fragment,
   useEffect,
   useState,
+  useRef,
 } from 'react'
 import ReactDOM from 'react-dom'
 import styled from '@emotion/styled'
@@ -15,6 +16,7 @@ import WordInput from './components/word-input'
 import Results from './components/results'
 import useDictionary from './hooks/useDictionary'
 import useSettings from './hooks/useSettings'
+//import usePrevState from './hooks/usePrevState'
 
 const AppContainer = styled('div')`
   font-family: sans-serif;
@@ -32,12 +34,15 @@ const ButtonsContainer = styled.div`
   margin: 8px;
 `
 
+const EMPTY_RESULTS = {
+  guessResults: []
+}
+
 const App = () => {
-  const [results, setResults] = useState({
-    guessResults: []
-  })
+  const [results, setResults] = useState(EMPTY_RESULTS)
 
   const [word, setWord] = useState('')
+  
   const [settings, setSettings] = useSettings()
   const dictionaries = useDictionary()
 
@@ -49,18 +54,27 @@ const App = () => {
     }, [dictionaries])
   }
 
-  const handleSubmit = async ({ word, isPuzzleWord }) => {
-    setWord(word)
-    await Promise.sleep()
-    setResults(
-      run(word, {
-        dictionaries,
-        isPuzzleWord,
-        onResult: setResults,
-        ...settings,
-      })
-    )
-  }
+  const handleSubmit = //useRef(
+    async ({ word, isPuzzleWord }) => {
+      setWord(word)
+      await Promise.sleep()
+      setResults(
+        run(word, {
+          dictionaries,
+          isPuzzleWord,
+          onResult: setResults,
+          ...settings,
+        })
+      )
+    }
+  //)
+  
+/*  useEffect(() => {
+    if (word) {
+      
+    }
+  }, [settings, word])
+  */
 
   const hasResult = !!results.guessResults.length
   const puzzleWords = dictionaries[0]

@@ -5,6 +5,7 @@ const webpackMiddleware =
 const webpackHotMiddleware =
   require('webpack-hot-middleware')
 const path = require('path')
+require('node-localstorage/register')
 const { RUNNING_ON_DESKTOP } = require('./constants')
 
 // not necessary yet!  huzzah!  🥳

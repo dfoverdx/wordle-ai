@@ -14,8 +14,6 @@ const Slider = styled(MuiSlider)`
   & .MuiSlider-thumb {
     z-index: 1300;
   }
-  
-  // TODO: figure out how to get the label not to clip
 `
 
 const Gray = styled.p`
@@ -36,7 +34,7 @@ const DecisiveThreshold = ({
     
   return <FormGroup>
     <Typography>
-      Decisive threshold
+      Decisive guess threshold
       <IconTooltip placement="top">
         <p>
           When there are more words remaining than there are guesses and each word is equally likely, the AI will violate <i>Hard mode</i> and play an incorrect word in order to narrow down the possibilities for the unknown letters.

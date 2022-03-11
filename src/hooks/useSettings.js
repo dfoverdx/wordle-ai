@@ -10,10 +10,11 @@ const getInitialSettings = () => ({
   anyFirstWord: false,
   random: false,
   forceHardMode: false,
-  autoplay: false,
+  autoplay: true,
   excludePrevious: false,
   wholeDictionary: false,
   tryToLose: false,
+  commonDupes: false,
   ...JSON.parse(
     localStorage.getItem('settings') || '{}'
   )
