@@ -1,6 +1,7 @@
 const moment = require('moment')
 
-const _WORDLE_DAY_0 = moment(WORDLE_DAY_0_TIME)
+const _WORDLE_DAY_0 = moment('2022-02-02')
+  .subtract(228, 'days')
 
 const getPuzzleNumber = (puzzleWords, word) => {
   const puzzleWordIdx = puzzleWords.indexOf(word)
