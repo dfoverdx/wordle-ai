@@ -81,7 +81,9 @@ const App = () => {
 
   return <AppWrapper>
     <ButtonsContainer>
-      <ShareButton results={results} />
+      <ShareButton
+        results={results}
+      />
       <Settings
         settings={settings}
         onChange={setSettings}

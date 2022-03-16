@@ -1,13 +1,15 @@
 import React from 'react';
 import ShareIcon from '@mui/icons-material/Share';
 import { IconButton } from '@mui/material';
-import { CURRENT_PUZZLE_NUMBER } from '../helpers';
+import { getCurrentPuzzleNumber } from '../helpers';
 
-const ShareButton = ({ results: { guessResults: r, } }) =>
-  r.length && navigator.canShare(getData(r))
+const ShareButton = ({ 
+  results: { guessResults: r, hardMode },
+}) =>
+  r.length && navigator.canShare(getData(r, hardMode))
     ? <IconButton
         onClick={() =>
-          navigator.share(getData(r))
+          navigator.share(getData(r, hardMode))
             .then(() => l('success'))
             .catch(e => l(e.message))
         }
@@ -18,10 +20,12 @@ const ShareButton = ({ results: { guessResults: r, } }) =>
 
 export default ShareButton
 
-const getData = r => ({
-  text: `Wordle ${CURRENT_PUZZLE_NUMBER} ${
+const getData = (r, hardMode) => ({
+  text: `Wordle ${getCurrentPuzzleNumber()} ${
     r.length > MAX_GUESSES ? 'X' : r.length
-  }/6
+  }/6${
+    hardMode ? '*' : ''
+  }
 
 ${r.slice(0, 6).map(gr => gr[1].join('')).join('\n')}
 
