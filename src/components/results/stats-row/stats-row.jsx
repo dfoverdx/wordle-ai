@@ -2,6 +2,8 @@ import React from 'react'
 import styled from '@emotion/styled'
 import CheckIcon from '@mui/icons-material/Check'
 import ClearIcon from '@mui/icons-material/Clear'
+import { Cell } from './cell'
+import { WordsLeftCell } from './words-left-cell.jsx'
 
 const Row = styled.div`
   display: flex;
@@ -9,26 +11,6 @@ const Row = styled.div`
   justify-content: space-evenly;
   align-content: center;
   margin-top: 16px;
-`
-
-const Cell = styled('div', {
-  shouldForwardProp: p => p !== 'color',
-})`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  align-content: center;
-  flex: 1;
-  
-  & > :first-child {
-    ${({ color }) => ({ color })};
-    font-size: 30px;
-  }
-  
-  & > :last-child {
-    font-size: 20px;
-    text-align: center;
-  }
 `
 
 const HardModeIcon = styled(({ hardMode, className }) =>
@@ -45,6 +27,7 @@ export const StatsRow = ({
   guessResults,
   lucky,
   wordsLeft,
+  remainingWords,
   hardMode,
   settings,
 }) =>
@@ -71,11 +54,14 @@ export const StatsRow = ({
           settings={settings}
           guessResults={guessResults}
         />
-        <LuckyCell {...{ lucky, settings }} />
-        <Cell color="#3B81F6">
-          <span>{wordsLeft}</span>
-          <span>words left</span>
-        </Cell>
+        <LuckyCell 
+          lucky={lucky}
+          settings={settings}
+        />
+        <WordsLeftCell 
+          wordsLeft={wordsLeft}
+          remainingWords={remainingWords}
+        />
       </Row>
       
 const HardModeCell = ({

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import {
-  Typography,
   Tooltip as MuiTooltip,
   IconButton,
   ClickAwayListener,

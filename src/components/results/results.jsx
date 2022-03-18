@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import styled from '@emotion/styled';
 import { FailedRow } from './failed-row.jsx';
 import { ResultRow } from './result-row.jsx';
-import { StatsRow } from './stats-row.jsx';
+import { StatsRow } from './stats-row';
 import { getPuzzleNumber } from '../../helpers';
 
 const ResultContainer = styled('div')`

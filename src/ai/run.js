@@ -141,13 +141,16 @@ const run = (
       if (words.length < 21) {
         l(words)
       }
+      
+      words = words.filter(w => w !== word).sort()
 
       return {
         guessResults,
         lucky,
         luckyAt,
-        wordsLeft: words.length - 1,
+        wordsLeft: words.length,
         hardMode,
+        remainingWords: words,
       }
     }
 
