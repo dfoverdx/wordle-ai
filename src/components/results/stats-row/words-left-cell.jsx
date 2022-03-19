@@ -84,6 +84,10 @@ const More = styled(({ words, className }) => {
     display: inline-grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 4px 8px;
+    
+    &:not(:last-child) {
+      margin-bottom: 2px;
+    }
   }
 `
 
