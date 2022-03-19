@@ -10,12 +10,13 @@ import {
   Input as MUIInput
 } from '@mui/material';
 import moment from 'moment';
+import Cookies from 'js-cookie'
 import useCurrentPuzzleWord
   from '../../hooks/useCurrentPuzzleWord';
 import Button from './button.jsx'
 
 const lastPlay = moment(
-  Number(localStorage.getItem('lastPlay')) || 0
+  Cookies.get('lastPlay')) || 0
 ).endOf('day')
 
 const Container = styled.div`
@@ -43,6 +44,11 @@ const Input = styled(MUIInput, {
 
 const useAutocomplete = false;
 
+const setCookies = word => {
+  Cookies.set('word', word)
+  Cookies.set('lastPlay', Date.now())
+}
+
 const WordInput = ({
   onSubmit,
   dictionaries: [puzzleWords, allWords],
@@ -63,8 +69,7 @@ const WordInput = ({
     
     setWord(currentPuzzle)
     setTimeout(() => {
-      localStorage.setItem('word', currentPuzzle)
-      localStorage.setItem('lastPlay', Date.now())
+      setCookies(currentPuzzle)
       onSubmit({
         word: currentPuzzle,
         isPuzzleWord: true,
@@ -89,7 +94,7 @@ const WordInput = ({
       if (today.diff(lastPlay, 'days') >= 1) {
         runCurrent()
       } else {
-        setWord(localStorage.getItem('word') || '')
+        setWord(Cookies.get('word') || '')
       }
     }
   })
@@ -109,18 +114,14 @@ const WordInput = ({
   }
 
   const handleKeyDown = e => {
-    if (valid && (
-      e.key === 'Return' ||
-      e.key === 'Enter'
-    )) {
+    if (valid && ['Return', 'Enter'].includes(e.key)) {
       e.target.select()
       handleSubmit()
     }
   }
 
   const handleSubmit = () => {
-    localStorage.setItem('word', word)
-    localStorage.setItem('lastPlay', Date.now())
+    setCookies(word)
     onSubmit({ word, isPuzzleWord })
   }
   
