@@ -117,6 +117,8 @@ const WordInput = ({
     if (valid && ['Return', 'Enter'].includes(e.key)) {
       e.target.select()
       handleSubmit()
+    } else if (!word && e.key === 'Enter') {
+      runCurrent()
     }
   }
 
