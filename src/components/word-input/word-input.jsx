@@ -3,17 +3,17 @@ import React, {
   useRef, 
   useState,
   useCallback,
-} from 'react';
-import styled from '@emotion/styled';
+} from 'react'
+import styled from '@emotion/styled'
 import { 
   Autocomplete, 
   Input as MUIInput
-} from '@mui/material';
-import moment from 'moment';
+} from '@mui/material'
+import moment from 'moment'
 import _ from 'lodash'
 import Cookies from 'js-cookie'
 import useCurrentPuzzleWord
-  from '../../hooks/useCurrentPuzzleWord';
+  from '../../hooks/useCurrentPuzzleWord'
 import Button from './button.jsx'
 
 const UNPLAY_SETTINGS = [
