@@ -16,7 +16,7 @@ import useCurrentPuzzleWord
 import Button from './button.jsx'
 
 const lastPlay = moment(
-  Cookies.get('lastPlay')) || 0
+  Cookies.get('lastPlay') || 0
 ).endOf('day')
 
 const Container = styled.div`
