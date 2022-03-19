@@ -9,7 +9,6 @@ const getInitialSettings = () => ({
   showWordsLeft: false,
   doShuffle: true,
   anyFirstWord: false,
-  random: false,
   forceHardMode: false,
   autoplay: true,
   excludePrevious: false,

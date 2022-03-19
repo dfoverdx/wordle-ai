@@ -10,10 +10,23 @@ import {
   Input as MUIInput
 } from '@mui/material';
 import moment from 'moment';
+import _ from 'lodash'
 import Cookies from 'js-cookie'
 import useCurrentPuzzleWord
   from '../../hooks/useCurrentPuzzleWord';
 import Button from './button.jsx'
+
+const UNPLAY_SETTINGS = [
+  'decisiveThreshold',
+  'random',
+  'doShuffle',
+  'anyFirstWord',
+  'forceHardMode',
+  'excludePrevious',
+  'wholeDictionary',
+  'tryToLose',
+  'commonDupes',
+]
 
 const lastPlay = moment(
   Cookies.get('lastPlay') || 0
@@ -57,16 +70,17 @@ const WordInput = ({
 }) => {
   const [word, setWord] = useState('')
   /** @type {string|false} */
-  const playedRef = useRef(false)
+  const [played, setPlayed] = useState(false)
   const inputRef = useRef()
   const currentPuzzle = useCurrentPuzzleWord(puzzleWords)
+  const playedToday = useRef(false)
   
   const runCurrent = () => {
     if (!currentPuzzle) {
       return
     }
     
-    playedRef.current = currentPuzzle
+    setPlayed(currentPuzzle)
     
     setWord(currentPuzzle)
     setTimeout(() => {
@@ -79,17 +93,28 @@ const WordInput = ({
   }
   
   useEffect(
-    () => { playedRef.current = false }, 
+    () => { setPlayed(false) }, 
+    [
+      currentPuzzle,
+      ...Object.values(
+        _.pick(settings, ...UNPLAY_SETTINGS)
+      ),
+    ]
+  )
+  
+  useEffect(
+    () => { playedToday.current = false },
     [currentPuzzle]
   )
 
   useEffect(() => {
     if (
       puzzleWords.length &&
-      !playedRef.current &&
+      !playedToday.current &&
       settings.autoplay
     ) {
-      playedRef.current = currentPuzzle
+      setPlayed(currentPuzzle)
+      playedToday.current = true
 
       const today = moment().endOf('day')
       if (today.diff(lastPlay, 'days') >= 1) {
@@ -125,7 +150,7 @@ const WordInput = ({
 
   const handleSubmit = () => {
     setCookies(word)
-    playedRef.current = word
+    setPlayed(word)
     onSubmit({ word, isPuzzleWord })
   }
   
@@ -176,7 +201,7 @@ const WordInput = ({
         onSetToCurrent={runCurrent}
         valid={valid}
         onSubmit={handleSubmit}
-        playedWord={playedRef.current}
+        playedWord={played}
       />
     </Container>
   )
