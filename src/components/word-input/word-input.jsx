@@ -56,6 +56,7 @@ const WordInput = ({
   hasResult,
 }) => {
   const [word, setWord] = useState('')
+  /** @type {string|false} */
   const playedRef = useRef(false)
   const inputRef = useRef()
   const currentPuzzle = useCurrentPuzzleWord(puzzleWords)
@@ -65,7 +66,7 @@ const WordInput = ({
       return
     }
     
-    playedRef.current = true
+    playedRef.current = currentPuzzle
     
     setWord(currentPuzzle)
     setTimeout(() => {
@@ -88,7 +89,7 @@ const WordInput = ({
       !playedRef.current &&
       settings.autoplay
     ) {
-      playedRef.current = true
+      playedRef.current = currentPuzzle
 
       const today = moment().endOf('day')
       if (today.diff(lastPlay, 'days') >= 1) {
@@ -124,6 +125,7 @@ const WordInput = ({
 
   const handleSubmit = () => {
     setCookies(word)
+    playedRef.current = word
     onSubmit({ word, isPuzzleWord })
   }
   
@@ -174,6 +176,7 @@ const WordInput = ({
         onSetToCurrent={runCurrent}
         valid={valid}
         onSubmit={handleSubmit}
+        playedWord={playedRef.current}
       />
     </Container>
   )
