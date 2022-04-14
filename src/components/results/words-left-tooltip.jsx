@@ -15,6 +15,9 @@ export const WordsLeftTooltip = ({
   words,
 }) => {
   const [open, setOpen] = useState(false)
+  if (!words?.length) {
+    return <ContentWrapper>{children}</ContentWrapper>
+  }
   
   return <ClickAwayListener
     onClickAway={() => setOpen(false)}

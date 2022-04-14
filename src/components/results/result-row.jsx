@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
+import { WordsLeftTooltip }
+  from './words-left-tooltip.jsx'
 
 const hiddenText = css`
   color: transparent;
@@ -32,6 +34,7 @@ export const ResultRow = ({
   guess,
   result,
   wordsLeft,
+  remainingWords,
   settings
 }) =>
   <>
@@ -43,11 +46,16 @@ export const ResultRow = ({
       )}
     </ResultRowContainer>
     {wordsLeft != null &&
-      <WordsLeftContainer {...settings}>
-        {wordsLeft}
-        {wordsLeft === 1 ? ' word ' : ' words '}
-        left
-      </WordsLeftContainer>
+      <WordsLeftTooltip
+        placement="bottom"
+        words={remainingWords}
+      >
+        <WordsLeftContainer {...settings}>
+          {wordsLeft}
+          {wordsLeft === 1 ? ' word ' : ' words '}
+          left
+        </WordsLeftContainer>
+      </WordsLeftTooltip>
     }
   </>
 
