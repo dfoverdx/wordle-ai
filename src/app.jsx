@@ -16,6 +16,8 @@ import WordInput from './components/word-input'
 import Results from './components/results'
 import useDictionary from './hooks/useDictionary'
 import useSettings from './hooks/useSettings'
+import wordContext from './contexts/word-context'
+import { getCurrentPuzzleNumber } from './helpers'
 //import usePrevState from './hooks/usePrevState'
 
 const AppContainer = styled('div')`
@@ -45,16 +47,17 @@ const App = () => {
   
   const [settings, setSettings] = useSettings()
   const dictionaries = useDictionary()
+  const [puzzleWords, allWords] = dictionaries
 
   if (RUN_ALL) {
     useEffect(() => {
-      if (dictionaries[0].length) {
+      if (puzzleWords.length) {
         runAll(dictionaries)
       }
     }, [dictionaries])
   }
 
-  const handleSubmit = //useRef(
+  const handleSubmit =
     async ({ word, isPuzzleWord }) => {
       setWord(word)
       await Promise.sleep()
@@ -67,41 +70,41 @@ const App = () => {
         })
       )
     }
-  //)
-  
-/*  useEffect(() => {
-    if (word) {
-      
-    }
-  }, [settings, word])
-  */
 
   const hasResult = !!results.guessResults.length
-  const puzzleWords = dictionaries[0]
+  
+  const isPuzzleWord = 
+    !!word && puzzleWords.includes(word)
+  const curPuzzleNum = getCurrentPuzzleNumber()
+  const puzzleNumber =
+    !isPuzzleWord ? null :
+    puzzleWords.indexOf(word) > curPuzzleNum ? '???' :
+    puzzleWords.indexOf(word)
+  
+  const wordCtx = {
+    word,
+    puzzleWords,
+    allWords,
+    puzzleNumber,
+    results,
+  }
 
   return <AppWrapper>
-    <ButtonsContainer>
-      <ShareButton
-        results={results}
-      />
-      <Settings
+    <wordContext.Provider value={wordCtx}>
+      <ButtonsContainer>
+        <ShareButton />
+        <Settings
+          settings={settings}
+          onChange={setSettings}
+          hasResult={hasResult}
+        />
+      </ButtonsContainer>
+      <WordInput
+        onSubmit={handleSubmit}
         settings={settings}
-        onChange={setSettings}
-        hasResult={hasResult}
       />
-    </ButtonsContainer>
-    <WordInput
-      dictionaries={dictionaries}
-      onSubmit={handleSubmit}
-      settings={settings}
-      hasResult={hasResult}
-    />
-    <Results
-      word={word}
-      puzzleWords={puzzleWords}
-      results={results}
-      settings={settings}
-    />
+      <Results settings={settings} />
+    </wordContext.Provider>
   </AppWrapper>
 }
 

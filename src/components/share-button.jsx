@@ -1,15 +1,21 @@
-import React from 'react';
-import ShareIcon from '@mui/icons-material/Share';
-import { IconButton } from '@mui/material';
-import { getCurrentPuzzleNumber } from '../helpers';
+import React, { useContext } from 'react'
+import ShareIcon from '@mui/icons-material/Share'
+import { IconButton } from '@mui/material'
+import { getCurrentPuzzleNumber } from '../helpers'
+import wordContext from '../contexts/word-context'
 
-const ShareButton = ({ 
-  results: { guessResults: r, hardMode },
-}) =>
-  r.length && navigator.canShare(getData(r, hardMode))
+const ShareButton = () => {
+  const {
+    results: { guessResults: r, hardMode },
+    puzzleNumber,
+  } = useContext(wordContext)
+  
+  const data = getData(r, hardMode, puzzleNumber)
+
+  return r.length && navigator.canShare(data)
     ? <IconButton
         onClick={() =>
-          navigator.share(getData(r, hardMode))
+          navigator.share(data)
             .then(() => l('success'))
             .catch(e => l(e.message))
         }
@@ -17,11 +23,12 @@ const ShareButton = ({
         <ShareIcon />
       </IconButton>
     : null
+}
 
 export default ShareButton
 
-const getData = (r, hardMode) => ({
-  text: `Wordle ${getCurrentPuzzleNumber()} ${
+const getData = (r, hardMode, puzzleNumber) => ({
+  text: `Wordle ${puzzleNumber} ${
     r.length > MAX_GUESSES ? 'X' : r.length
   }/6${
     hardMode ? '*' : ''
@@ -30,4 +37,5 @@ const getData = (r, hardMode) => ({
 ${r.slice(0, 6).map(gr => gr[1].join('')).join('\n')}
 
 Played by AI by Bethany Hitch`,
+  url: 'https://dfdx.us/wordle-ai',
 })

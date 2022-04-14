@@ -57,7 +57,7 @@ const bgColors = {
   [YELLOW]: '#F8D74A',
 }
 
-const ResultItem = styled('div', {
+const ResultItem = styled('span', {
   shouldForwardProp: p => p !== 'result'
 })`
   height: 50px;

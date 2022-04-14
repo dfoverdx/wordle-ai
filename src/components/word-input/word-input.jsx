@@ -3,6 +3,7 @@ import React, {
   useRef, 
   useState,
   useCallback,
+  useContext,
 } from 'react'
 import styled from '@emotion/styled'
 import { 
@@ -15,6 +16,7 @@ import Cookies from 'js-cookie'
 import useCurrentPuzzleWord
   from '../../hooks/useCurrentPuzzleWord'
 import Button from './button.jsx'
+import wordContext from '../../contexts/word-context'
 
 const UNPLAY_SETTINGS = [
   'decisiveThreshold',
@@ -64,10 +66,14 @@ const setCookies = word => {
 
 const WordInput = ({
   onSubmit,
-  dictionaries: [puzzleWords, allWords],
   settings,
-  hasResult,
 }) => {
+  const {
+    puzzleWords,
+    allWords,
+    results,
+  } = useContext(wordContext)
+  
   const [word, setWord] = useState('')
   /** @type {string|false} */
   const [played, setPlayed] = useState(false)
@@ -191,6 +197,8 @@ const WordInput = ({
         value={word}
         onKeyDown={handleKeyDown}
       />
+      
+  const hasResult = !!results.guessResults.length
   
   return (
     <Container hasResult={hasResult} {...settings}>

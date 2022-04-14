@@ -25,8 +25,8 @@ module.exports = (env, argv) => {
         hotMiddlewareScript,
       ].filter(x => x),
     },
-    devtool: RUNNING_ON_DESKTOP &&
-      'eval-cheap-source-map',
+    devtool: RUNNING_ON_DESKTOP && 
+      (PROD ? 'source-map' : 'eval'),
     module: {
       rules: [
         {

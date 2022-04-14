@@ -1,21 +1,22 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import styled from '@emotion/styled';
 import { FailedRow } from './failed-row.jsx';
 import { ResultRow } from './result-row.jsx';
 import { StatsRow } from './stats-row';
 import { getPuzzleNumber } from '../../helpers';
+import wordContext from '../../contexts/word-context'
 
 const ResultContainer = styled('div')`
   display: flex;
   flex-direction: column;
 `
 
-const Results = props => {
-  const { results, puzzleWords, word, settings } = props
+const Results = ({ settings }) => {
+  const { results } = useContext(wordContext)
   const hasResult = !!results.guessResults.length
 
   return <ResultContainer>
-    <Header {...props} hasResult={hasResult} />
+    <Header settings={settings} />
     {results.guessResults.map(
       ([guess, result, wordsLeft], i) =>
         <Fragment key={guess}>
@@ -33,30 +34,22 @@ const Results = props => {
 }
 
 const Header = styled(({
-  word,
-  puzzleWords,
-  hasResult,
+  settings,
   className,
 }) => {
-  if (!hasResult) {
-    return null
-  }
-
-  const puzzleNumber = getPuzzleNumber(puzzleWords, word)
-  l(puzzleWords.includes(word))
-
-  return <h1 className={className}>
-    {puzzleNumber != null
-      ? <>
-          Wordle{' '}
-          {puzzleNumber === false
-            ? '???'
-            : puzzleNumber
-          }
-        </>
-      : 'Non-Wordle puzzle'
-    }
-  </h1>
+  const {
+    results,
+    puzzleNumber,
+  } = useContext(wordContext)
+  
+  return !results.guessResults.length
+    ? null
+    : <h1 className={className}>
+        {puzzleNumber != null
+          ? `Wordle ${puzzleNumber}`
+          : 'Non-Wordle puzzle'
+        }
+      </h1>
 })`
   font-size: 1.5rem;
   font-weight: 400;
