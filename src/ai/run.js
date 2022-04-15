@@ -155,13 +155,14 @@ const run = (
     }
 
     words = processor.next(word, result)
-    guessResults.last.push(words.length)
+    guessResults.last.push(words.length, words)
 
     onResult({
       guessResults,
       lucky,
       wordsLeft: words.length,
       hardMode,
+      wordsRemaining: words
     })
 
     !i && (padLength = words.length.toString().length)

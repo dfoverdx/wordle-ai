@@ -32,8 +32,9 @@ export const WordsLeftTooltip = ({
         title={<More words={words} />}
       >
         <ContentWrapper onClick={() => setOpen(true)}>
-          {children}
-          <Arrow />
+          {typeof children === 'function'
+            ? children(<Arrow />)
+            : children}
         </ContentWrapper>
       </Tooltip>
     </Container>

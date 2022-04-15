@@ -18,7 +18,7 @@ const Results = ({ settings }) => {
   return <ResultContainer>
     <Header settings={settings} />
     {results.guessResults.map(
-      ([guess, result, wordsLeft], i) =>
+      ([guess, result, wordsLeft, remainingWords], i) =>
         <Fragment key={guess}>
           {i === MAX_GUESSES && <FailedRow />}
           <ResultRow
@@ -26,6 +26,7 @@ const Results = ({ settings }) => {
             result={result}
             settings={settings}
             wordsLeft={wordsLeft}
+            remainingWords={remainingWords}
           />
         </Fragment>
     )}

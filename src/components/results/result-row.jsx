@@ -17,6 +17,24 @@ const WordsLeftContainer = styled('div')`
   color: gray;
   font-size: 20px;
   justify-content: center;
+  
+  & > div {
+    position: relative;
+    max-width: min-content;
+    height: min-content;
+    white-space: nowrap;
+  }
+`
+
+const ArrowContainer = styled('div')`
+  position: absolute;
+  right: 0;
+  top: 100%;
+  transform: translate(100%, -70%);
+  
+  & > * {
+    margin-right: unset;
+  }
 `
 
 const ResultRowContainer = styled('div')`
@@ -49,13 +67,17 @@ export const ResultRow = ({
       <WordsLeftTooltip
         placement="bottom"
         words={remainingWords}
-      >
-        <WordsLeftContainer {...settings}>
-          {wordsLeft}
-          {wordsLeft === 1 ? ' word ' : ' words '}
-          left
-        </WordsLeftContainer>
-      </WordsLeftTooltip>
+      >{
+        arrow =>
+          <WordsLeftContainer {...settings}>
+            <div>
+              {wordsLeft}
+              {wordsLeft === 1 ? ' word ' : ' words '}
+              left
+              <ArrowContainer>{arrow}</ArrowContainer>
+            </div>
+          </WordsLeftContainer>
+      }</WordsLeftTooltip>
     }
   </>
 
