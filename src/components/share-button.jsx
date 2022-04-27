@@ -12,7 +12,7 @@ const ShareButton = () => {
   
   const data = getData(r, hardMode, puzzleNumber)
 
-  return r.length && navigator.canShare(data)
+  return r.length && navigator.canShare?.(data)
     ? <IconButton
         onClick={() =>
           navigator.share(data)
@@ -37,5 +37,5 @@ const getData = (r, hardMode, puzzleNumber) => ({
 ${r.slice(0, 6).map(gr => gr[1].join('')).join('\n')}
 
 Played by AI by Bethany Hitch`,
-  url: 'https://dfdx.us/wordle-ai',
+  url: 'https://dxdt.me/wordle-ai',
 })
