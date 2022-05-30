@@ -27,6 +27,9 @@ const fetchJS = async () => {
 
 fetchJS().then(list =>
   fs.writeFileSync(
-    './data/puzzle-words.txt'
+    './data/puzzle-words.txt',
+    list
   )
 )
+  .then(() => console.log('Success'))
+  .catch(err => console.error(err))
