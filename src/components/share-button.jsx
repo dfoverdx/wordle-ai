@@ -30,7 +30,7 @@ export default ShareButton
 const getData = (r, hardMode, puzzleNumber) => ({
   text: `Wordle ${puzzleNumber} ${
     r.length > MAX_GUESSES ? 'X' : r.length
-  }/${MAX_GUESSES}${
+  }/6${
     hardMode ? '*' : ''
   }
 
