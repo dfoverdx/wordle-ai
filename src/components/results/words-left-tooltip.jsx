@@ -63,6 +63,7 @@ const More = styled(({
   className, 
   children,
 }) => {
+  words = [...words].sort()
   const [showLines, setShowLines] = useState(5)
   const showMore = words.length > (showLines + 1) * 5
   
