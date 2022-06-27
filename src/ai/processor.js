@@ -9,6 +9,7 @@ import run from './run';
 export default class Processor {
   constructor(
     words,
+    prioritizeUniqueLetters = true,
     wordLen = WORD_LEN,
     maxGuesses = MAX_GUESSES
   ) {
@@ -16,6 +17,8 @@ export default class Processor {
     this.known = newFilledArray(wordLen)
     this.wordLen = wordLen
     this.maxGuesses = maxGuesses
+    this.prioritizeUnqiueLetters =
+      prioritizeUniqueLetters
     this.turn = 1
     this.guessed = new Set()
     this.decisiveGuesses = new Set()
@@ -36,6 +39,7 @@ export default class Processor {
   static init(
     [puzzleWords, allWords],
     isPuzzleWord,
+    prioritizeUniqueLetters = true,
     wordLen = WORD_LEN,
     maxGuesses = MAX_GUESSES
   ) {
@@ -48,11 +52,12 @@ export default class Processor {
 
     const p = new this(
       [...dict],
+      prioritizeUniqueLetters,
       wordLen,
       maxGuesses
     )
 
-    p.sortByWordRank()
+    p.sortByWordRank(prioritizeUniqueLetters)
     return p
   }
 
@@ -60,12 +65,21 @@ export default class Processor {
     return printMethods(this.print > 0).l
   }
 
-  sortByWordRank(sortAll = false) {
+  sortByWordRank(
+    prioritizeUniqueLetters =
+      this.prioritizeUnqiueLetters,
+    sortAll = false
+  ) {
     this._sortLetterFrequency(sortAll)
     this._sortLetterPerPositionFrequency(sortAll)
-    return this._sortUniqueLetters(
-      sortAll ? Processor.allWords5 : this.words
-    )
+    
+    if (prioritizeUniqueLetters) {
+      this._sortUniqueLetters(
+        sortAll ? Processor.allWords5 : this.words
+      )
+    }
+    
+    return sortAll ? Processor.allWords5 : this.words
   }
 
   get unknown() {

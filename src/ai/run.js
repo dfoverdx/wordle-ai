@@ -18,6 +18,7 @@ const run = (
     excludePrevious,
     wholeDictionary = false,
     tryToLose = false,
+    prioritizeUniqueLetters = true,
   } = options
 
   const { l, lj, ljs, lje, ljn } = printMethods(print)
@@ -59,6 +60,7 @@ const run = (
   processor = processor || Processor.init(
     dictionaries,
     isPuzzleWord,
+    prioritizeUniqueLetters,
     wordLen,
     maxGuesses
   )
@@ -90,7 +92,9 @@ const run = (
       )
 
     if (anyFirstWord) {
-      processor.sortByWordRank(true)
+      processor.sortByWordRank(
+        prioritizeUniqueLetters, true
+      )
       hardMode = dictionaries[0]
         .includes(Processor.allWords5[0])
     }

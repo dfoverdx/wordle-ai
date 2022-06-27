@@ -15,6 +15,7 @@ const getInitialSettings = () => ({
   wholeDictionary: false,
   tryToLose: false,
   commonDupes: false,
+  prioritizeUniqueLetters: true,
   ...JSON.parse(localStorage.settings || '{}'),
 })
 
