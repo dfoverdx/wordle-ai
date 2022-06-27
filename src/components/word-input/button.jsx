@@ -14,12 +14,13 @@ const Button = ({
   onSetToCurrent,
   onClear,
   playedWord,
+  random,
 }) =>
   !word ?
     <StyledButton onClick={onSetToCurrent}>
       Today's word
     </StyledButton> :
-  !valid || playedWord === word ?
+  (!valid || playedWord === word) && !random ?
     <StyledButton onClick={onClear}>Clear</StyledButton> : 
   <StyledButton onClick={onSubmit}>Go</StyledButton>
 

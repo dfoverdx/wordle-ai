@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react'
 import _ from 'lodash'
-//import Cookies from 'js-cookie'
 
 const getInitialSettings = () => ({
   hideText: false,
@@ -10,7 +9,7 @@ const getInitialSettings = () => ({
   doShuffle: true,
   anyFirstWord: false,
   forceHardMode: false,
-  autoplay: true,
+  autoplay: false,
   excludePrevious: false,
   wholeDictionary: false,
   tryToLose: false,
@@ -26,7 +25,6 @@ const useSettings = () => {
     const next = { ...settings, ...s }
     
     if (!_.isEqual(settings, next)) {
-      //Cookies.set('settings', next)
       localStorage.setItem(
         'settings',
         JSON.stringify(next)

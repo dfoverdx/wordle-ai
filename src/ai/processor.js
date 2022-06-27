@@ -63,9 +63,15 @@ export default class Processor {
   sortByWordRank(sortAll = false) {
     this._sortLetterFrequency(sortAll)
     this._sortLetterPerPositionFrequency(sortAll)
-    return this._sortUniqueLetters(
-      sortAll ? Processor.allWords5 : this.words
-    )
+    
+    // temporary test
+    //if (sortAll) {
+      return this._sortUniqueLetters(
+        sortAll ? Processor.allWords5 : this.words
+      )
+    //}
+    
+    return this.words
   }
 
   get unknown() {
@@ -270,8 +276,11 @@ export default class Processor {
     }
   }
 
-  _sortLetterPerPositionFrequency(sortAll = false) {
-    const { words, wordLen } = this
+  _sortLetterPerPositionFrequency(
+    sortAll = false,
+    words = this.words
+  ) {
+    const { wordLen } = this
     const allWords = Processor.allWords5
     const counts =
       newFilledArray(wordLen, () => ({}))
@@ -311,6 +320,14 @@ export default class Processor {
     return words.sort((a, b) =>
       uniqueCompValue(a) - uniqueCompValue(b)
     )
+  }
+  
+  _sortCommonDoubleLetters(words = this.words) {
+    const doubleLetterWords = words.filter(w =>
+      w.some((l, i, a) => a.includes(l, i + 1))
+    )
+    
+    
   }
 }
 

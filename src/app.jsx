@@ -42,12 +42,12 @@ const EMPTY_RESULTS = {
 
 const App = () => {
   const [results, setResults] = useState(EMPTY_RESULTS)
-
-  const [word, setWord] = useState('')
   
   const [settings, setSettings] = useSettings()
   const dictionaries = useDictionary()
   const [puzzleWords, allWords] = dictionaries
+  
+  const [word, setWord] = useState('')
 
   if (RUN_ALL) {
     useEffect(() => {
