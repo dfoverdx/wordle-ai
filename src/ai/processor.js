@@ -105,17 +105,16 @@ export default class Processor {
       .map(x => x[0])
     )
 
-    const noneOfThese =
-      arr
-        .filter(([c, r], i) =>
-          r === GRAY &&
-          !yellows.has(c) &&
-          !arr.slice(i + 1)
-            .map(x => x[0])
-            .filter((_, i) => !known[i])
-            .includes(c)
-        )
-        .map(x => x[0])
+    const noneOfThese = arr
+      .filter(([c, r], i) =>
+        r === GRAY &&
+        !yellows.has(c) &&
+        !arr.slice(i + 1)
+          .map(x => x[0])
+          .filter((_, i) => !known[i])
+          .includes(c)
+      )
+      .map(x => x[0])
 
     words = words.filter(w =>
       !noneOfThese.some(c =>
@@ -136,10 +135,22 @@ export default class Processor {
       }
 
       words = words.filter(w => w[i] !== c)
+      
+      if (
+        arr.some(([c2, r2]) => 
+          c2 === c && r2 === GRAY)
+      ) {
+        words = words.filter(w => 
+          getLetterCounts(w)[c] <= 
+            yellowGreenCounts[c]
+        )
+      }
 
       if (!knownCounts[c]) {
         words = words.filter(w => w.includes(c))
-      } else if (yellowGreenCounts[c] > knownCounts[c]) {
+      } else if (
+        yellowGreenCounts[c] > knownCounts[c]
+      ) {
         this.decisiveGuesses.delete(c)
 
         words = words.filter(w => {
