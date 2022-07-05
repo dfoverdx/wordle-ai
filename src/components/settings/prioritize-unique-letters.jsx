@@ -13,7 +13,13 @@ const PrioritizeUniqueLettersToggle = props => {
       {...props}
       setting="prioritizeUniqueLetters"
       label="Prioritize unique letters"
-      disabledWhen={s => s.random}
+      disabledWhen={s => s.random || s.tryToLose}
+      forceChecked={
+        s =>
+          s.random ? false :
+          s.tryToLose ? true :
+          null
+      }
     />
     <IconTooltip>
       <p>
