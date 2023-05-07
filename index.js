@@ -65,3 +65,25 @@ try {
 } catch (error) {
   console.error(error)
 }
+
+const allWords = require('fs')
+  .readFileSync('./data/all-words.txt')
+  .toString()
+  .split('\n')
+
+const usefulLetters = /[mpfwb]/
+const countUsefulLetters = w => Array.from(new Set(w))
+  .reduce(
+    (c, l) => c + Number(usefulLetters.test(l)),
+    0
+  )
+
+const usefulWords = allWords
+  .filter(w => usefulLetters.test(w))
+  .map(w => [w, countUsefulLetters(w)])
+  .filter(([, c]) => c > 2)
+  .sort((a, b) => b[1] - a[1])
+  .map(x => x[0])
+  .join()
+  
+console.log('\n\n\n' + usefulWords + '\n\n\n')

@@ -8,28 +8,41 @@ const fetchJS = async () => {
   
   try {
     const html = await (await fetch(url)).text()
+    const scriptNames = [
+      ...html.matchAll(
+        /\<script [^>]*?src="(.+?(?<=\/)[\w.]+?\.js)"[^>]*?\>/sg
+      )
+    ].map(x => x[1])
     
-    const scriptName =
-      html.match(/\<script src="(main\.[^"]+)"/)[1]
-    const script = 
-      await (await fetch(urlBase + scriptName)).text()
+    const list = (await Promise.all(
+      scriptNames.map(async x => (await fetch(x)).text())
+    ))
+      .map(s => 
+        s.match(/\[\s*["'](?:CIGAR|AAHED)[^\]]+\]/i)
+      )
+      .filter(x => !!x)
+      .map(x => JSON.parse(x[0].toUpperCase()))[0]
       
-    const puzzleList = JSON.parse(
-      script.match(/\[\s*["']CIGAR[^\]]+\]/i)[0]
-        .toUpperCase()
-    )
-      
-    return puzzleList.join('\n')
+    const cigarIdx = list.indexOf('CIGAR')
+    return [
+      list.slice(0, cigarIdx),
+      list.slice(cigarIdx)
+    ].map(x => x.join('\n'))
+
   } catch (err) {
     console.error(err)
   }
 }
 
-fetchJS().then(list =>
+fetchJS().then(([allWords, puzzleWords]) => {
   fs.writeFileSync(
     './data/puzzle-words.txt',
-    list
+    puzzleWords
   )
-)
+  fs.writeFileSync(
+    './data/all-words.txt',
+    allWords
+  )
+})
   .then(() => console.log('Success'))
   .catch(err => console.error(err))
