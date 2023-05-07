@@ -2,8 +2,9 @@
   "name": "wordle-ai",
   "version": "1.0.0",
   "scripts": {
-    "start": "node index.js",
-    "build": "webpack --mode production",
+    "start": "npm run updateBrowserList && node index.js",
+    "updateBrowserList": "npx browserlist@latest --update-db",
+    "build": "npm run updateBrowserList && webpack --mode production",
     "wordList": "node update-wordlist.js"
   },
   "dependencies": {
